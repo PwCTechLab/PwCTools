@@ -4,9 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - PwC Tools</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-
+    @*@Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")*@
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/Content/kanban.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,14 +37,26 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Contra Labs</p>
+            <p>&copy; @DateTime.Now.Year - Skynet Labs</p>
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/signalR")
     @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/appscripts")
-    @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)*@
+
+    <script src="~/Scripts/jquery-2.2.4.js"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+
+    <script src="~/AppScripts/main.js"></script>
+    <script src="~/AppScripts/kanbanBoardDragDrop.js"></script>
+    <script src="~/AppScripts/boardService.js"></script>
+    <script src="~/AppScripts/boardCtrl.js"></script>
 </body>
 </html>

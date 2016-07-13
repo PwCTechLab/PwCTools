@@ -14,10 +14,12 @@ namespace PwCTools
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                        "~/Scripts/angular.js",
+            bundles.Add(new ScriptBundle("~/bundles/signalR").Include(
                         "~/Scripts/jquery.signalR-{version}.js",
                         "~/Scripts/toastr.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                        "~/Scripts/angular.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/appscripts").Include(
                         "~/AppScripts/main.js",
