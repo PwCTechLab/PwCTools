@@ -2,6 +2,8 @@
     ViewBag.Title = "Pwc Taskboard";
 }
 
+<link href="~/Content/kanban.css" rel="stylesheet" />
+
 <div style="width:113%; margin: 0 auto 0 auto;">
 
     <div class="row" ng-controller="boardCtrl">
@@ -65,3 +67,14 @@
         </div><!-- /.modal -->
     </div>
 </div>
+
+@section scripts {
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+
+    <script src="~/AppScripts/main.js"></script>
+    <script src="~/AppScripts/kanbanBoardDragDrop.js"></script>
+    <script src="~/AppScripts/boardService.js"></script>
+    <script src="~/AppScripts/boardCtrl.js"></script>
+}

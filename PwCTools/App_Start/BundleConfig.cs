@@ -40,7 +40,6 @@ namespace PwCTools
                       "~/Content/bootstrap.min.css",
                       "~/Content/site.css",
                       "~/Content/toastr.css",
-                      "~/Content/kanban.css",
                       "~/Content/font-awesome.min.css"));
         }
     }
