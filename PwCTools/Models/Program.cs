@@ -5,12 +5,11 @@ using System.Web;
 
 namespace PwCTools.Models
 {
-    public partial class Column
+    public partial class Program
     {
         public int Id { get; set; }
-        public int ProjectId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public virtual List<KanbanTask> Tasks { get; set; }
+        public virtual List<Project> Projects { get; set; }
     }
 }

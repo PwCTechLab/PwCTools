@@ -12,15 +12,15 @@ namespace PwCTools.Models
             if (HttpContext.Current.Cache["columns"] == null)
             {
                 var columns = new List<Column>();
-                var tasks = new List<Task>();
+                var tasks = new List<KanbanTask>();
                 for (int i = 1; i < 6; i++)
                 {
-                    tasks.Add(new Task { ColumnId = 1, Id = i, Name = "Task " + i, Description = "Task " + i + " Description" });
+                    tasks.Add(new KanbanTask { ColumnId = 1, Id = i, Name = "Task " + i, Description = "Task " + i + " Description" });
                 }
                 columns.Add(new Column { Description = "to do column", Id = 1, Name = "to do", Tasks = tasks });
-                columns.Add(new Column { Description = "in progress column", Id = 2, Name = "in progress", Tasks = new List<Task>() });
-                columns.Add(new Column { Description = "test column", Id = 3, Name = "test", Tasks = new List<Task>() });
-                columns.Add(new Column { Description = "done column", Id = 4, Name = "done", Tasks = new List<Task>() });
+                columns.Add(new Column { Description = "in progress column", Id = 2, Name = "in progress", Tasks = new List<KanbanTask>() });
+                columns.Add(new Column { Description = "test column", Id = 3, Name = "test", Tasks = new List<KanbanTask>() });
+                columns.Add(new Column { Description = "done column", Id = 4, Name = "done", Tasks = new List<KanbanTask>() });
                 HttpContext.Current.Cache["columns"] = columns;
             }
             return (List<Column>)HttpContext.Current.Cache["columns"];
@@ -33,7 +33,7 @@ namespace PwCTools.Models
                     select c).FirstOrDefault();
         }
 
-        public Task GetTask(int taskId)
+        public KanbanTask GetTask(int taskId)
         {
             var columns = this.GetColumns();
             foreach (var c in columns)
