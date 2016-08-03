@@ -201,7 +201,8 @@
     <Compile Include="Controllers\BoardWebApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="DAL\KanbanContext.cs" />
+    <Compile Include="DAL\BoardContext.cs" />
+    <Compile Include="DAL\BoardInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -212,7 +213,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Program.cs" />
     <Compile Include="Models\Project.cs" />
-    <Compile Include="Models\KanbanTask.cs" />
+    <Compile Include="Models\BoardTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

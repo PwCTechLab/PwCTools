@@ -11,6 +11,6 @@ namespace PwCTools.Models
         public int ProjectId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public virtual List<KanbanTask> Tasks { get; set; }
+        public virtual List<BoardTask> Tasks { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace PwCTools.Models
 {
-    public class KanbanTask
+    public class BoardTask
     {
         public int Id { get; set; }
         public int ColumnId { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PwCTools.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,16 +12,20 @@ namespace PwCTools.Models
         {
             if (HttpContext.Current.Cache["columns"] == null)
             {
-                var columns = new List<Column>();
-                var tasks = new List<KanbanTask>();
-                for (int i = 1; i < 6; i++)
-                {
-                    tasks.Add(new KanbanTask { ColumnId = 1, Id = i, Name = "Task " + i, Description = "Task " + i + " Description" });
-                }
-                columns.Add(new Column { Description = "to do column", Id = 1, Name = "to do", Tasks = tasks });
-                columns.Add(new Column { Description = "in progress column", Id = 2, Name = "in progress", Tasks = new List<KanbanTask>() });
-                columns.Add(new Column { Description = "test column", Id = 3, Name = "test", Tasks = new List<KanbanTask>() });
-                columns.Add(new Column { Description = "done column", Id = 4, Name = "done", Tasks = new List<KanbanTask>() });
+                //var columns = new List<Column>();
+                //var tasks = new List<KanbanTask>();
+                //for (int i = 1; i < 6; i++)
+                //{
+                //    tasks.Add(new KanbanTask { ColumnId = 1, Id = i, Name = "Task " + i, Description = "Task " + i + " Description" });
+                //}
+                //columns.Add(new Column { Description = "to do column", Id = 1, Name = "to do", Tasks = tasks });
+                //columns.Add(new Column { Description = "in progress column", Id = 2, Name = "in progress", Tasks = new List<KanbanTask>() });
+                //columns.Add(new Column { Description = "test column", Id = 3, Name = "test", Tasks = new List<KanbanTask>() });
+                //columns.Add(new Column { Description = "done column", Id = 4, Name = "done", Tasks = new List<KanbanTask>() });
+
+                BoardContext db = new BoardContext();
+                var columns = db.Projects.Find(1).Columns.ToList();
+
                 HttpContext.Current.Cache["columns"] = columns;
             }
             return (List<Column>)HttpContext.Current.Cache["columns"];
@@ -33,7 +38,7 @@ namespace PwCTools.Models
                     select c).FirstOrDefault();
         }
 
-        public KanbanTask GetTask(int taskId)
+        public BoardTask GetTask(int taskId)
         {
             var columns = this.GetColumns();
             foreach (var c in columns)
@@ -69,6 +74,9 @@ namespace PwCTools.Models
             columns.Add(sourceCol);
 
             this.UpdateColumns(columns.OrderBy(c => c.Id).ToList());
+
+            //Update DB
+            UpdateTask(task);
         }
 
         public void EditTask(int taskId, string taskName, string TaskDescription)
@@ -77,7 +85,16 @@ namespace PwCTools.Models
             task.Name = taskName;
             task.Description = TaskDescription;
 
-            //UpdateColumns(this.GetColumns());
+            UpdateTask(task);
+        }
+
+        private void UpdateTask(BoardTask task)
+        {
+            using (BoardContext db = new BoardContext())
+            {
+                db.Entry(task).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
         private void UpdateColumns(List<Column> columns)
