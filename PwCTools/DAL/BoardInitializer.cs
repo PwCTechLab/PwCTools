@@ -7,7 +7,7 @@ using PwCTools.Models;
 
 namespace PwCTools.DAL
 {
-    public class BoardInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<BoardContext>
+    public class BoardInitializer : System.Data.Entity.DropCreateDatabaseAlways<BoardContext>
     {
         protected override void Seed(BoardContext context)
         {
@@ -38,13 +38,22 @@ namespace PwCTools.DAL
             columns.ForEach(s => context.Columns.Add(s));
             context.SaveChanges();
 
+            var sprints = new List<Sprint>
+            {
+                new Sprint { ProjectId=1, Name="Completed Sprint", Description="Completed UCORT Sprint", StartDate=DateTime.Now.AddDays(-14), EndDate=DateTime.Now, IsActive=false },
+                new Sprint { ProjectId=1, Name="Active Sprint", Description="Active UCORT Sprint", StartDate=DateTime.Now, EndDate=DateTime.Now.AddDays(14), IsActive=true }
+            };
+
+            sprints.ForEach(s => context.Sprints.Add(s));
+            context.SaveChanges();
+
             var tasks = new List<BoardTask>
             {
-                new BoardTask { ColumnId=1, Name="Task 1", Description="Task 1 Description" },
-                new BoardTask { ColumnId=1, Name="Task 2", Description="Task 2 Description" },
-                new BoardTask { ColumnId=1, Name="Task 3", Description="Task 3 Description" },
-                new BoardTask { ColumnId=1, Name="Task 4", Description="Task 4 Description" },
-                new BoardTask { ColumnId=1, Name="Task 5", Description="Task 5 Description" }
+                new BoardTask { SprintId=1, ColumnId=1, Name="Task 1", Description="Task 1 Description" },
+                new BoardTask { SprintId=2, ColumnId=1, Name="Task 2", Description="Task 2 Description" },
+                new BoardTask { SprintId=2, ColumnId=1, Name="Task 3", Description="Task 3 Description" },
+                new BoardTask { SprintId=2, ColumnId=1, Name="Task 4", Description="Task 4 Description" },
+                new BoardTask { SprintId=2, ColumnId=1, Name="Task 5", Description="Task 5 Description" }
             };
 
             tasks.ForEach(s => context.BoardTasks.Add(s));

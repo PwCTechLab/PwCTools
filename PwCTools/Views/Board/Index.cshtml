@@ -10,7 +10,14 @@
 
         <div ng-include="'/AppScripts/busyModal.html'" ng-show="isLoading"></div>
 
-        <h1>PwC Taskboard</h1>
+        <div class="row">
+            <div class="col-md-11">
+                <h1>PwC Taskboard</h1>
+            </div>
+            <div class="col-md-1">
+                <button id="btnAddTask" type="button" class="btn btn-primary add-task" data-toggle="modal" data-target="#taskModel">Add&nbsp;&nbsp;<i class="fa fa-lg fa-plus-square-o" aria-hidden="true"></i></button>
+            </div>
+        </div>
 
         <div class="panel panel-default">
             <div class="panel panel-primary kanban-col" id="{{col.Id}}" kanban-board-drop="over" ng-repeat="col in columns">
@@ -20,14 +27,14 @@
                 <div class="panel-body">
                     <div class="kanban-centered">
                         <article class="kanban-entry grab" draggable="true" kanban-board-dragg="task"
-                                 ng-repeat="task in col.Tasks" style="margin-bottom: 10px;">
+                                    ng-repeat="task in col.Tasks" style="margin-bottom: 10px;">
                             <div class="kanban-entry-inner">
                                 <div class="kanban-label">
                                     <h5><strong>{{task.Name}}</strong><a href="#" class="btn btn-default btn-sm" role="button"><span class="fa fa-user"></span></a></h5>
                                     <p>{{task.Description}}</p>
                                     <p>
-                                        <a href="#" class="btn btn-default btn-xs" role="button"><span class="fa fa-comment"></span></a>&nbsp;
-                                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#editModal" data-id="{{task.Id}}" data-name="{{task.Name}}" data-description="{{task.Description}}"><i class="fa fa-pencil"></i></button>
+                                        <button type="button" id="btnEditTask" class="btn btn-default btn-xs" data-toggle="modal" data-target="#taskModel" data-custom-id="{{task.Id}}" data-name="{{task.Name}}" data-description="{{task.Description}}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnArchiveTask" class="btn btn-default btn-xs" data-ng-click="archive(task.Id)"><i class="fa fa-archive" aria-hidden="true"></i></button>
                                     </p>
                                 </div>
                             </div>
@@ -37,35 +44,36 @@
             </div>
         </div>
 
-        @* modal window *@
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Edit Task</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <input type="hidden" id="task-id" data-ng-model="task.Id" />
-                            <div class="form-group">
-                                <label for="task-name" class="control-label">Task Name:</label>
-                                <input type="text" class="form-control" id="task-name" data-ng-model="task.Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="description-text" class="control-label">Description:</label>
-                                <textarea class="form-control" id="task-description" data-ng-model="task.Description" required></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-ng-click="save()">Save changes</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-    </div>
+            @* modal window *@
+            <div class="modal fade" id="taskModel" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 id="editTaskModalTitle" class="modal-title">Edit Task</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <input type="hidden" id="task-id" data-ng-model="task.Id" />
+                                <div class="form-group">
+                                    <label for="task-name" class="control-label">Task Name:</label>
+                                    <input type="text" class="form-control" id="task-name" data-ng-model="task.Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description-text" class="control-label">Description:</label>
+                                    <textarea class="form-control" id="task-description" data-ng-model="task.Description" required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-warning" data-ng-click="delete()">Delete&nbsp;&nbsp;<i class="fa fa-lg fa-trash" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-primary" data-ng-click="save()">Save changes</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div>
 </div>
 
 @section scripts {
@@ -77,3 +85,7 @@
     <script src="~/AppScripts/boardService.js"></script>
     <script src="~/AppScripts/boardCtrl.js"></script>
 }
+
+<script type="text/javascript">
+    
+</script>

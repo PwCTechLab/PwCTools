@@ -1,6 +1,7 @@
 ﻿using PwCTools.DAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -8,30 +9,56 @@ namespace PwCTools.Models
 {
     public class BoardRepository
     {
+
+        private int _projectId = (int)HttpContext.Current.Cache["ActiveProject"]; //ToDo need code to select and change this
+
+        private int GetActiveSprint(int projectId)
+        {
+            if (HttpContext.Current.Cache["ActiveSprint"] == null)
+            {
+                using (BoardContext db = new BoardContext())
+                {
+                    //Get ActiveSprint ID
+                    var activeSprintId = db.Sprints
+                        .Where(s => s.ProjectId == projectId && s.IsActive == true).FirstOrDefault().Id;
+
+                    HttpContext.Current.Cache["ActiveSprint"] = activeSprintId; 
+                }
+            }
+            return (int)HttpContext.Current.Cache["ActiveSprint"];
+        }
+
         public List<Column> GetColumns()
         {
             if (HttpContext.Current.Cache["columns"] == null)
             {
-                //var columns = new List<Column>();
-                //var tasks = new List<KanbanTask>();
-                //for (int i = 1; i < 6; i++)
-                //{
-                //    tasks.Add(new KanbanTask { ColumnId = 1, Id = i, Name = "Task " + i, Description = "Task " + i + " Description" });
-                //}
-                //columns.Add(new Column { Description = "to do column", Id = 1, Name = "to do", Tasks = tasks });
-                //columns.Add(new Column { Description = "in progress column", Id = 2, Name = "in progress", Tasks = new List<KanbanTask>() });
-                //columns.Add(new Column { Description = "test column", Id = 3, Name = "test", Tasks = new List<KanbanTask>() });
-                //columns.Add(new Column { Description = "done column", Id = 4, Name = "done", Tasks = new List<KanbanTask>() });
-
                 BoardContext db = new BoardContext();
-                var columns = db.Projects.Find(1).Columns.ToList();
+
+                int activeSprintId = GetActiveSprint(_projectId);
+
+                var columns = db.Columns
+                    .Where(c => c.ProjectId == _projectId)
+                    .Select(g => new
+                    {
+                        column = g,
+                        task = g.Tasks.Where(t => t.SprintId == activeSprintId)
+                    }).AsEnumerable() //Project to system object (.AsEnumerable) then can create entity object
+                    .Select(c => new Column
+                    {
+                        Id = c.column.Id,
+                        ProjectId = c.column.ProjectId,
+                        Name = c.column.Name,
+                        Description = c.column.Description,
+                        Tasks = c.task.ToList()
+                    })
+                    .ToList();
 
                 HttpContext.Current.Cache["columns"] = columns;
             }
             return (List<Column>)HttpContext.Current.Cache["columns"];
         }
 
-        public Column GetColumn(int colId)
+        public Column GetColumn(int? colId)
         {
             return (from c in this.GetColumns()
                     where c.Id == colId
@@ -86,6 +113,56 @@ namespace PwCTools.Models
             task.Description = TaskDescription;
 
             UpdateTask(task);
+        }
+
+        public void AddTask(string taskName, string TaskDescription)
+        {
+            var task = new BoardTask();
+            task.Name = taskName;
+            task.Description = TaskDescription;
+            task.SprintId = GetActiveSprint(_projectId);
+
+            //Put in first column
+            var columns = this.GetColumns();
+            var column = columns.OrderBy(c => c.Id).First();
+            task.ColumnId = column.Id;
+
+            using (BoardContext db = new BoardContext())
+            {
+                db.BoardTasks.Add(task);
+                db.SaveChanges();
+            }
+
+            column.Tasks.Add(task);
+        }
+
+        public void ArchiveTask(int taskId)
+        {
+            var task = this.GetTask(taskId);
+
+            // Remove task from source column
+            var sourceCol = this.GetColumn(task.ColumnId);
+            sourceCol.Tasks.RemoveAll(t => t.Id == taskId);
+
+            task.ColumnId = null;
+
+            UpdateTask(task);
+        }
+
+        public void DeleteTask(int taskId)
+        {
+            var task = this.GetTask(taskId);
+
+            // Remove task from source column
+            var sourceCol = this.GetColumn(task.ColumnId);
+            sourceCol.Tasks.RemoveAll(t => t.Id == taskId);
+
+            //Delete from the db
+            using (BoardContext db = new BoardContext())
+            {
+                db.Entry(task).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+            }
         }
 
         private void UpdateTask(BoardTask task)

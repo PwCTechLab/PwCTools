@@ -56,7 +56,41 @@ namespace PwCTools.Controllers
         {
             dynamic json = editTaskParams;
             var repo = new BoardRepository();
-            repo.EditTask((int)json.taskId, (string)json.taskName, (string)json.taskDescription);
+
+            if(json.taskId == "")
+                repo.AddTask((string)json.taskName, (string)json.taskDescription);
+            else
+                repo.EditTask((int)json.taskId, (string)json.taskName, (string)json.taskDescription);
+
+            var response = Request.CreateResponse();
+            response.StatusCode = HttpStatusCode.OK;
+
+            return response;
+        }
+
+        [Route("api/BoardWebApi/ArchiveTask")]
+        [HttpPost]
+        public HttpResponseMessage ArchiveTask(JObject archiveTaskParams)
+        {
+            dynamic json = archiveTaskParams;
+            var repo = new BoardRepository();
+
+            repo.ArchiveTask((int)json.taskId);
+
+            var response = Request.CreateResponse();
+            response.StatusCode = HttpStatusCode.OK;
+
+            return response;
+        }
+
+        [Route("api/BoardWebApi/DeleteTask")]
+        [HttpPost]
+        public HttpResponseMessage DeleteTask(JObject deleteTaskParams)
+        {
+            dynamic json = deleteTaskParams;
+            var repo = new BoardRepository();
+
+            repo.DeleteTask((int)json.taskId);
 
             var response = Request.CreateResponse();
             response.StatusCode = HttpStatusCode.OK;

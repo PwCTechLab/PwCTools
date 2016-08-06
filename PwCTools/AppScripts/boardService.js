@@ -36,6 +36,24 @@
             });
     };
 
+    var archiveTask = function (taskIdVal) {
+        return $http.post("/api/BoardWebApi/ArchiveTask", { taskId: taskIdVal })
+            .then(function (response) {
+                return response.status == 200;
+            }, function (error) {
+                return $q.reject(error.data.Message);
+            });
+    };
+
+    var deleteTask = function (taskIdVal) {
+        return $http.post("/api/BoardWebApi/DeleteTask", { taskId: taskIdVal })
+            .then(function (response) {
+                return response.status == 200;
+            }, function (error) {
+                return $q.reject(error.data.Message);
+            });
+    };
+
     var initialize = function () {
 
         connection = jQuery.hubConnection();
@@ -62,6 +80,8 @@
 
     return {
         initialize: initialize,
+        deleteTask: deleteTask,
+        archiveTask: archiveTask,
         editTask: editTask,
         sendRequest: sendRequest,
         getColumns: getColumns,

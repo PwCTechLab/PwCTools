@@ -82,3 +82,17 @@ input[type="checkbox"].input-validation-error {
         background: black;
         z-index: 1049;
 }
+
+button.add-task {
+    margin-top: 22px;
+}
+
+/* Bootstrap Updates*/
+.panel-primary {
+    border-color: #EEA126;
+}
+
+.panel-primary .panel-heading {
+    background-color: #EEA126;
+    border-color: #EEA126;
+}

@@ -41,7 +41,34 @@
             boardService.sendRequest();
         }, onError);
         $scope.isLoading = true;
-        $('#editModal').modal('hide');
+        $('#taskModel').modal('hide');
+    };
+
+    //Archive Task
+    $scope.archive = function (id) {
+            bootbox.confirm("Are you sure want to archive this task?", function (result) {
+                if (result) {
+                    boardService.archiveTask(id).then(function (taskArchived) {
+                        $scope.isLoading = false;
+                        boardService.sendRequest();
+                    }, onError);
+                    $scope.isLoading = true;
+                }
+            });
+    };
+
+    //Delete Task
+    $scope.delete = function () {
+        bootbox.confirm("Are you sure want to delete this task?", function (result) {
+            if (result) {
+                boardService.deleteTask($('#task-id').val()).then(function (taskDeleted) {
+                    $scope.isLoading = false;
+                    boardService.sendRequest();
+                }, onError);
+                $scope.isLoading = true;
+                $('#taskModel').modal('hide');
+            }
+        });
     };
 
     // Listen to the 'refreshBoard' event and refresh the board as a result
@@ -60,9 +87,9 @@
 
 $(document).ready(function () {
 
-    $('#editModal').on('show.bs.modal', function (event) {
+    $('#taskModel').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('id') // Extract info from data-* attributes
+        var id = button.data('custom-id') // Extract info from data-* attributes
         var name = button.data('name')
         var description = button.data('description')
         
@@ -71,4 +98,13 @@ $(document).ready(function () {
         modal.find('#task-name').val(name)
         modal.find('#task-description').val(description)
     })
+
+    $(document).on("click", "#btnEditTask", function (event) {
+        $('#editTaskModalTitle').text('Edit Task');
+    })
+
+    $("#btnAddTask").on("click", function () {
+        $('#editTaskModalTitle').text('Create Task');
+    })
+
 });

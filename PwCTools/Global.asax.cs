@@ -18,6 +18,8 @@ namespace PwCTools
             GlobalConfiguration.Configure(App_Start.WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            HttpContext.Current.Cache["ActiveProject"] = 1; //TODO add code to manage project selection
         }
     }
 }
