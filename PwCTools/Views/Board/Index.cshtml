@@ -15,7 +15,7 @@
                 <h1>PwC Taskboard</h1>
             </div>
             <div class="col-md-1">
-                <button id="btnAddTask" type="button" class="btn btn-primary add-task" data-toggle="modal" data-target="#taskModel">Add&nbsp;&nbsp;<i class="fa fa-lg fa-plus-square-o" aria-hidden="true"></i></button>
+                <button id="btnAddTask" type="button" class="btn btn-primary add-task" data-toggle="modal" data-target="#updateTaskModal">Add&nbsp;&nbsp;<i class="fa fa-lg fa-plus-square-o" aria-hidden="true"></i></button>
             </div>
         </div>
 
@@ -27,13 +27,16 @@
                 <div class="panel-body">
                     <div class="kanban-centered">
                         <article class="kanban-entry grab" draggable="true" kanban-board-dragg="task"
-                                    ng-repeat="task in col.Tasks" style="margin-bottom: 10px;">
+                                 ng-repeat="task in col.Tasks" style="margin-bottom: 10px;">
                             <div class="kanban-entry-inner">
                                 <div class="kanban-label">
-                                    <h5><strong>{{task.Name}}</strong><a href="#" class="btn btn-default btn-sm" role="button"><span class="fa fa-user"></span></a></h5>
+                                    <h5>
+                                        <strong><a href="#" class="board-link" data-toggle="modal" data-target="#taskDetailsModal" data-ng-click="loadTaskDetails(task.Id)" data-custom-id="{{task.Id}}" data-name="{{task.Name}}" data-description="{{task.Description}}">{{task.Name}}</a></strong>
+                                        <a href="#" class="btn btn-default btn-sm btn-user" role="button"><span class="fa fa-user"></span></a>
+                                    </h5>
                                     <p>{{task.Description}}</p>
                                     <p>
-                                        <button type="button" id="btnEditTask" class="btn btn-default btn-xs" data-toggle="modal" data-target="#taskModel" data-custom-id="{{task.Id}}" data-name="{{task.Name}}" data-description="{{task.Description}}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnEditTask" class="btn btn-default btn-xs" data-toggle="modal" data-target="#updateTaskModal" data-custom-id="{{task.Id}}" data-name="{{task.Name}}" data-description="{{task.Description}}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                         <button type="button" id="btnArchiveTask" class="btn btn-default btn-xs" data-ng-click="archive(task.Id)"><i class="fa fa-archive" aria-hidden="true"></i></button>
                                     </p>
                                 </div>
@@ -44,36 +47,108 @@
             </div>
         </div>
 
-            @* modal window *@
-            <div class="modal fade" id="taskModel" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 id="editTaskModalTitle" class="modal-title">Edit Task</h4>
-                        </div>
-                        <div class="modal-body">
+        @* update task modal window *@
+        <div class="modal fade" id="updateTaskModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 id="editTaskModalTitle" class="modal-title">Edit Task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" id="task-id" data-ng-model="task.Id" />
+                            <div class="form-group">
+                                <label for="task-name" class="control-label">Task Name:</label>
+                                <input type="text" class="form-control" id="task-name" data-ng-model="task.Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description-text" class="control-label">Description:</label>
+                                <textarea class="form-control" id="task-description" data-ng-model="task.Description" required></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-warning" data-ng-click="delete()">Delete&nbsp;&nbsp;<i class="fa fa-lg fa-trash" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-primary" data-ng-click="save()">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        @* task details modal window *@
+        <div class="modal fade" id="taskDetailsModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 id="task-name" class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <h5 id="task-description"></h5>
+                        <!-- Comment History Section -->
+                        <div id="comment-container" class="container" style="max-height: 400px; overflow-y:auto;">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4>Comments</h4>
+                                </div><!-- /col-sm-12 -->
+                            </div><!-- /row -->
+                            <div class="row" ng-repeat="c in comments">
+                                <div class="col-sm-2">
+                                    <div class="thumbnail">
+                                        <img class="img-responsive user-photo" src="~/Images/avatar_2x.png">
+                                    </div><!-- /thumbnail -->
+                                </div><!-- /col-sm-1 -->
+
+                                <div class="col-sm-10">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <strong>{{c.CreatedBy}}</strong> <span class="text-muted">{{c.CreatedTimeSpan}}</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            {{c.Comment}}
+                                        </div><!-- /panel-body -->
+                                    </div><!-- /panel panel-default -->
+                                </div><!-- /col-sm-5 -->
+                            </div><!-- /row -->
                             <form>
-                                <input type="hidden" id="task-id" data-ng-model="task.Id" />
-                                <div class="form-group">
-                                    <label for="task-name" class="control-label">Task Name:</label>
-                                    <input type="text" class="form-control" id="task-name" data-ng-model="task.Name" required>
+                                <div class="row">
+
+                                    <div class="col-sm-12">
+                                        <a href="#" id="addComentLink" onclick="$('#comment-input-container').toggle();">Add Comment</a>
+                                    </div>
+
                                 </div>
-                                <div class="form-group">
-                                    <label for="description-text" class="control-label">Description:</label>
-                                    <textarea class="form-control" id="task-description" data-ng-model="task.Description" required></textarea>
+                                <div id="comment-input-container" style="display: none;">
+                                    <div class="row">
+                                        <div class="form-group col-xs-offset-2 col-xs-10">
+                                            <label for="description-text" class="control-label">Comment:</label>
+                                            <textarea class="form-control" style="min-width: 100%" id="task-comment" data-ng-model="comment.Comment" required></textarea>
+                                            <input type="hidden" id="task-comment-id" data-ng-model="task.Id" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-offset-8 col-sm-4">
+                                            <label class="btn btn-default btn-file" style="margin: 0px 3px 0px 22px;">
+                                                Browse <input type="file" style="display: none;">
+                                            </label>
+                                            <button type="button" class="btn btn-primary add-comment" data-ng-click="addComment()">Add</button>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-warning" data-ng-click="delete()">Delete&nbsp;&nbsp;<i class="fa fa-lg fa-trash" aria-hidden="true"></i></button>
-                            <button type="button" class="btn btn-primary" data-ng-click="save()">Save changes</button>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-        </div>
+                    </div><!-- /container -->
+                    <!-- End Comment History Section -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+</div>
 </div>
 
 @section scripts {
@@ -87,5 +162,5 @@
 }
 
 <script type="text/javascript">
-    
+
 </script>

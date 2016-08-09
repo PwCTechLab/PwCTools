@@ -83,10 +83,6 @@ input[type="checkbox"].input-validation-error {
         z-index: 1049;
 }
 
-button.add-task {
-    margin-top: 22px;
-}
-
 /* Bootstrap Updates*/
 .panel-primary {
     border-color: #EEA126;
@@ -96,3 +92,41 @@ button.add-task {
     background-color: #EEA126;
     border-color: #EEA126;
 }
+
+/* Comment History CSS */
+#comment-container .thumbnail {
+    padding:0px;
+}
+#comment-container .panel {
+	position:relative;
+}
+#comment-container .panel-default {
+    padding: 0px 0px 0px 0px;
+    overflow: visible;
+}
+#comment-container .panel>.panel-heading:after, #comment-container .panel>.panel-heading:before{
+	position:absolute;
+	top:11px;left:-16px;
+	right:100%;
+	width:0;
+	height:0;
+	display:block;
+	content:" ";
+	border-color:transparent;
+	border-style:solid solid outset;
+	pointer-events:none;
+}
+#comment-container .panel>.panel-heading:after{
+	border-width:7px;
+	border-right-color:#f7f7f7;
+	margin-top:1px;
+	margin-left:2px;
+}
+#comment-container .panel>.panel-heading:before{
+	border-right-color:#ddd;
+	border-width:8px;
+}
+#comment-container .panel-body {
+    padding: 15px;
+}
+/* End Comment History CSS */

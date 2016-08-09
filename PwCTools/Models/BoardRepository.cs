@@ -11,19 +11,17 @@ namespace PwCTools.Models
     {
 
         private int _projectId = (int)HttpContext.Current.Cache["ActiveProject"]; //ToDo need code to select and change this
+        BoardContext _db = BoardContext.Instance;
 
         private int GetActiveSprint(int projectId)
         {
             if (HttpContext.Current.Cache["ActiveSprint"] == null)
             {
-                using (BoardContext db = new BoardContext())
-                {
-                    //Get ActiveSprint ID
-                    var activeSprintId = db.Sprints
-                        .Where(s => s.ProjectId == projectId && s.IsActive == true).FirstOrDefault().Id;
+                //Get ActiveSprint ID
+                var activeSprintId = _db.Sprints
+                    .Where(s => s.ProjectId == projectId && s.IsActive == true).FirstOrDefault().Id;
 
-                    HttpContext.Current.Cache["ActiveSprint"] = activeSprintId; 
-                }
+                HttpContext.Current.Cache["ActiveSprint"] = activeSprintId; 
             }
             return (int)HttpContext.Current.Cache["ActiveSprint"];
         }
@@ -32,11 +30,9 @@ namespace PwCTools.Models
         {
             if (HttpContext.Current.Cache["columns"] == null)
             {
-                BoardContext db = new BoardContext();
-
                 int activeSprintId = GetActiveSprint(_projectId);
 
-                var columns = db.Columns
+                var columns = _db.Columns
                     .Where(c => c.ProjectId == _projectId)
                     .Select(g => new
                     {
@@ -127,11 +123,8 @@ namespace PwCTools.Models
             var column = columns.OrderBy(c => c.Id).First();
             task.ColumnId = column.Id;
 
-            using (BoardContext db = new BoardContext())
-            {
-                db.BoardTasks.Add(task);
-                db.SaveChanges();
-            }
+            _db.BoardTasks.Add(task);
+            _db.SaveChanges();
 
             column.Tasks.Add(task);
         }
@@ -157,26 +150,44 @@ namespace PwCTools.Models
             var sourceCol = this.GetColumn(task.ColumnId);
             sourceCol.Tasks.RemoveAll(t => t.Id == taskId);
 
-            //Delete from the db
-            using (BoardContext db = new BoardContext())
-            {
-                db.Entry(task).State = System.Data.Entity.EntityState.Deleted;
-                db.SaveChanges();
-            }
+            _db.Entry(task).State = System.Data.Entity.EntityState.Deleted;
+            _db.SaveChanges();
         }
 
         private void UpdateTask(BoardTask task)
         {
-            using (BoardContext db = new BoardContext())
-            {
-                db.Entry(task).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
+            _db.Entry(task).State = System.Data.Entity.EntityState.Modified;
+            _db.SaveChanges();
         }
 
         private void UpdateColumns(List<Column> columns)
         {
             HttpContext.Current.Cache["columns"] = columns;
+        }
+
+        public List<BoardTaskComment> GetComments(int taskId)
+        {
+            var task = this.GetTask(taskId);
+            if (task != null)
+            {
+                return task.Comments;
+            }
+
+            return null;
+        }
+
+        public void AddComment(int taskId, string commentText, string createdBy)
+        {
+            var comment = new BoardTaskComment();
+            comment.BoardTaskId = taskId;
+            comment.Comment = commentText;
+            comment.CreatedBy = createdBy;
+            comment.CreatedDateTime = DateTime.Now;
+
+            //Save updated comment
+            _db.BoardTasksComments.Add(comment);
+            _db.SaveChanges();
+
         }
     }
 }

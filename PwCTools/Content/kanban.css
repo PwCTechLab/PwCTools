@@ -296,7 +296,11 @@
                         filter: alpha(opacity=60);
                     }
 
-                    .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h5 a {
+                    .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h5 a.board-link {
+                        color: #303641;
+                    }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h5 a.btn-user {
                         float: right;
                     }
 
@@ -372,4 +376,8 @@ body {
     /* Rules below not implemented in browsers yet */
     -o-user-select: none;
     user-select: none;
+}
+
+button.add-task {
+    margin-top: 22px;
 }

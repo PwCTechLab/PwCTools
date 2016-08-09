@@ -39,9 +39,9 @@ namespace PwCTools
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",
-                      "~/Content/site.css",
                       "~/Content/toastr.css",
-                      "~/Content/font-awesome.min.css"));
+                      "~/Content/font-awesome.min.css",
+                      "~/Content/site.css"));
         }
     }
 }

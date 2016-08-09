@@ -9,7 +9,7 @@ namespace PwCTools.Controllers
 {
     public class BoardWebApiController : ApiController
     {
-        [HttpGet]
+        [HttpGet, ActionName("Get")]
         public HttpResponseMessage Get()
         {
             var repo = new BoardRepository();
@@ -21,7 +21,7 @@ namespace PwCTools.Controllers
             return response;
         }
 
-        [HttpGet]
+        [HttpGet, ActionName("CanMove")]
         public HttpResponseMessage CanMove(int sourceColId, int targetColId)
         {
             var response = Request.CreateResponse();
@@ -32,6 +32,18 @@ namespace PwCTools.Controllers
             {
                 response.Content = new StringContent(JsonConvert.SerializeObject(new { canMove = true }));
             }
+
+            return response;
+        }
+
+        [HttpGet, ActionName("GetComments")]
+        public HttpResponseMessage GetComments(int taskId)
+        {
+            var repo = new BoardRepository();
+            var response = Request.CreateResponse();
+
+            response.Content = new StringContent(JsonConvert.SerializeObject(repo.GetComments(taskId)));
+            response.StatusCode = HttpStatusCode.OK;
 
             return response;
         }
@@ -91,6 +103,21 @@ namespace PwCTools.Controllers
             var repo = new BoardRepository();
 
             repo.DeleteTask((int)json.taskId);
+
+            var response = Request.CreateResponse();
+            response.StatusCode = HttpStatusCode.OK;
+
+            return response;
+        }
+
+        [Route("api/BoardWebApi/AddComment")]
+        [HttpPost]
+        public HttpResponseMessage AddComment(JObject addCommentParams)
+        {
+            dynamic json = addCommentParams;
+            var repo = new BoardRepository();
+
+            repo.AddComment((int)json.taskId, (string)json.comment, "Chris Sallee"); //ToDo add check on identity
 
             var response = Request.CreateResponse();
             response.StatusCode = HttpStatusCode.OK;

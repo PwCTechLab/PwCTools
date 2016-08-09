@@ -15,5 +15,7 @@ namespace PwCTools.Models
 
         //public virtual Column Column { get; set; }
         //public virtual Sprint Sprint { get; set; }
+
+        public virtual List<BoardTaskComment> Comments { get; set; }
     }
 }

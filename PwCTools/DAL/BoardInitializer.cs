@@ -58,6 +58,16 @@ namespace PwCTools.DAL
 
             tasks.ForEach(s => context.BoardTasks.Add(s));
             context.SaveChanges();
+
+            var comments = new List<BoardTaskComment>
+            {
+                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 1", CreatedBy="Chris Sallee", CreatedDateTime=DateTime.Now },
+                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 2", CreatedBy="Michael Hall", CreatedDateTime=DateTime.Now },
+                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 3", CreatedBy="Chris Sallee", CreatedDateTime=DateTime.Now }
+            };
+
+            comments.ForEach(s => context.BoardTasksComments.Add(s));
+            context.SaveChanges();
         }
     }
 }

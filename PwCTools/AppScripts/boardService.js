@@ -2,7 +2,16 @@
     var proxy = null;
 
     var getColumns = function () {
-        return $http.get("/api/BoardWebApi").then(function (response) {
+        return $http.get("/api/BoardWebApi/Get").then(function (response) {
+            return response.data;
+        }, function (error) {
+            return $q.reject(error.data.Message);
+        });
+    };
+
+    var getComments = function (taskIdVal) {
+        return $http.get("/api/BoardWebApi/GetComments", { params: { taskId: taskIdVal } })
+            .then(function (response) {
             return response.data;
         }, function (error) {
             return $q.reject(error.data.Message);
@@ -54,6 +63,15 @@
             });
     };
 
+    var addComment = function (taskIdVal, commentVal) {
+        return $http.post("/api/BoardWebApi/AddComment", { taskId: taskIdVal, comment: commentVal })
+            .then(function (response) {
+                return response.status == 200;
+            }, function (error) {
+                return $q.reject(error.data.Message);
+            });
+    };
+
     var initialize = function () {
 
         connection = jQuery.hubConnection();
@@ -80,10 +98,12 @@
 
     return {
         initialize: initialize,
+        addComment: addComment,
         deleteTask: deleteTask,
         archiveTask: archiveTask,
         editTask: editTask,
         sendRequest: sendRequest,
+        getComments: getComments,
         getColumns: getColumns,
         canMoveTask: canMoveTask,
         moveTask: moveTask
