@@ -130,3 +130,20 @@ input[type="checkbox"].input-validation-error {
     padding: 15px;
 }
 /* End Comment History CSS */
+
+/* File Upload CSS */
+#progressbar {
+    background-color: black;
+    background-repeat: repeat-x;
+    border-radius: 13px;
+    padding: 3px;
+}
+
+#progressbar > div {
+    background-color: orange;
+    width: 0%;
+    height: 20px;
+    border-radius: 10px;
+}
+
+/* End File upload CSS*/

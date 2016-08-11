@@ -13,6 +13,8 @@ namespace PwCTools.Models
         public string CreatedBy { get; set; } //ToDo Change to int and link to user table
         public DateTime CreatedDateTime { get; set; }
 
+        public virtual List<BoardCommentAttachment> Attachments { get; set; }
+
         public string CreatedTimeSpan
         {
             get

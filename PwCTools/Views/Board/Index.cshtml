@@ -130,12 +130,21 @@
                                     <div class="row">
                                         <div class="col-sm-offset-8 col-sm-4">
                                             <label class="btn btn-default btn-file" style="margin: 0px 3px 0px 22px;">
-                                                Browse <input type="file" style="display: none;">
+                                                Browse <input type="file" id="btnFileUpload" style="display: none;">
                                             </label>
+                                            @*<input type="file" name="file" id="btnFileUpload" style="margin: 0px 3px 0px 22px;" />*@
                                             <button type="button" class="btn btn-primary add-comment" data-ng-click="addComment()">Add</button>
                                         </div>
                                     </div>
-
+                                    <div class="row">
+                                        <div class="col-sm-offset-8 col-sm-4">
+                                            <div id="progressbar" style="width:100px;display:none;">
+                                                <div>
+                                                    saadsd
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                     </div><!-- /container -->
@@ -154,6 +163,10 @@
 @section scripts {
     <script src="~/Scripts/angular.js"></script>
     <script src="~/bundles/signalR"></script>
+    
+    <script src="~/Scripts/jquery.ui.widget.js"></script>
+    <script src="~/Scripts/jquery.iframe-transport.js"></script>
+    <script src="~/Scripts/jquery.fileupload.js"></script>
 
     <script src="~/AppScripts/main.js"></script>
     <script src="~/AppScripts/kanbanBoardDragDrop.js"></script>

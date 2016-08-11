@@ -21,6 +21,11 @@ namespace PwCTools
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                         "~/Scripts/angular.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/fileupload").Include(
+                        "~/Scripts/jquery.ui.widget.js",
+                        "~/Scripts/jquery.iframe-transport.js",
+                        "~/Scripts/Scripts/jquery.fileupload.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/kanbanscripts").Include(
                         "~/AppScripts/main.js",
                         "~/AppScripts/kanbanBoardDragDrop.js",

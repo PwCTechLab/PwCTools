@@ -31,6 +31,7 @@ namespace PwCTools.DAL
         public DbSet<Sprint> Sprints { get; set; }
         public DbSet<BoardTask> BoardTasks { get; set; }
         public DbSet<BoardTaskComment> BoardTasksComments { get; set; }
+        public DbSet<BoardCommentAttachment> BoardCommentAttachments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
