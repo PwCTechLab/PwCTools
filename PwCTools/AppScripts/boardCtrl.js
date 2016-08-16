@@ -82,11 +82,11 @@
 
     //Add Comment
     $scope.addComment = function () {
-        boardService.addComment($('#task-comment-id').val(), $('#task-comment').val()).then(function (addComment) {
+        boardService.addComment($('#detailDlg-task-id').val(), $('#detailDlg-new-comment').val(), $('#detailDlg-comment-id').val()).then(function (addComment) {
             $scope.isLoading = false;
             $('#comment-input-container').toggle();
-            $('#task-comment').val('');
-            boardService.getComments($('#task-comment-id').val())
+            $('#detailDlg-new-comment').val('');
+            boardService.getComments($('#detailDlg-task-id').val())
            .then(function (data) {
                $scope.comments = data;
                boardService.sendRequest();
@@ -128,15 +128,15 @@ $(document).ready(function () {
         var width = $('.modal-dialog').width() - 22;
         $(this).find("#comment-container").css("max-width", width);
         
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('custom-id') // Extract info from data-* attributes
-        var name = button.data('name')
-        var description = button.data('description')
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var id = button.data('custom-id'); // Extract info from data-* attributes
+        var name = button.data('name');
+        var description = button.data('description');
 
-        var modal = $(this)
-        modal.find('#task-comment-id').val(id)
-        modal.find('#task-name').text(name + ' Details')
-        modal.find('#task-description').text(description)
+        var modal = $(this);
+        modal.find('#detailDlg-task-id').val(id);
+        modal.find('#task-name').text(name + ' Details');
+        modal.find('#task-description').text(description);
     })
 
     $(document).on("click", "#btnEditTask", function (event) {
@@ -150,26 +150,35 @@ $(document).ready(function () {
     //File Upload Script
     $('#btnFileUpload').fileupload({
         url: '../Handlers/FileUploadHandler.ashx?upload=start',
+        dataType: 'json',
         add: function (e, data) {
             console.log('add', data);
-            $('#progressbar').show();
+            $('#progressbar div').css('width', '0%');
+            $('#progress').show();
+            $('#comment-container').animate({ scrollTop: $('#modal-footer').offset().top }, 'slow'); //scroll to bottom
             data.submit();
     },
     progress: function(e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
-        $('#progressbar div').css('width', progress + '%');
+        $('.progress-bar').css('width', progress + '%').attr('aria-valuenow', progress);
     },
     success: function(response, status) {
-        $('#progressbar').hide();
-        $('#progressbar div').css('width', '0%');
+        //$('#progressbar').hide();
+        //$('#progressbar div').css('width', '0%');
+        $('#detailDlg-comment-id').val(response.CommentId);
         console.log('success', response);
     },
     error: function(error) {
-        $('#progressbar').hide();
+        $('#progress').hide();
         $('#progressbar div').css('width', '0%');
         console.log('error', error);
     }
-});
+    });
 
+    $('#addComment').bind('fileuploadsubmit', function (e, data) {
+        // The example input, doesn't have to be part of the upload form:
+        var input = $('#detailDlg-task-id');
+        data.formData = { taskId: input.val() };
+    });
 
 });

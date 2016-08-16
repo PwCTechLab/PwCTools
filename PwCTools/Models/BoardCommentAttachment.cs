@@ -10,7 +10,7 @@ namespace PwCTools.Models
         public int Id { get; set; }
         public int BoardTaskCommentId { get; set; }
         public string FileName { get; set; }
+        public string FilePath { get; set; }
         public string FileContentType { get; set; }
-        public byte[] FileData { get; set; }
     }
 }

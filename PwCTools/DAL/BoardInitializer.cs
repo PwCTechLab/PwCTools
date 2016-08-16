@@ -61,9 +61,9 @@ namespace PwCTools.DAL
 
             var comments = new List<BoardTaskComment>
             {
-                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 1", CreatedBy="Chris Sallee", CreatedDateTime=DateTime.Now },
-                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 2", CreatedBy="Michael Hall", CreatedDateTime=DateTime.Now },
-                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 3", CreatedBy="Chris Sallee", CreatedDateTime=DateTime.Now }
+                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 1", CreatedBy="Chris Sallee", CreatedDateTime=DateTime.Now.AddDays(-2) },
+                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 2", CreatedBy="Michael Hall", CreatedDateTime=DateTime.Now.AddHours(-12) },
+                new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 3", CreatedBy="Chris Sallee", CreatedDateTime=DateTime.Now.AddHours(-1) }
             };
 
             comments.ForEach(s => context.BoardTasksComments.Add(s));

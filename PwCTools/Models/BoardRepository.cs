@@ -11,7 +11,7 @@ namespace PwCTools.Models
     {
 
         private int _projectId = (int)HttpContext.Current.Cache["ActiveProject"]; //ToDo need code to select and change this
-        BoardContext _db = BoardContext.Instance;
+        BoardContext _db = BoardContext.GetInstance(1); //ToDo pass user id
 
         private int GetActiveSprint(int projectId)
         {
@@ -176,8 +176,14 @@ namespace PwCTools.Models
             return null;
         }
 
-        public void AddComment(int taskId, string commentText, string createdBy)
+        public int AddComment(int taskId, string commentText, string createdBy, int? commentId)
         {
+            if (commentId != null)
+            {
+                EditComment(taskId, commentText, createdBy, (int)commentId);
+                return (int)commentId;
+            }
+
             var comment = new BoardTaskComment();
             comment.BoardTaskId = taskId;
             comment.Comment = commentText;
@@ -188,6 +194,42 @@ namespace PwCTools.Models
             _db.BoardTasksComments.Add(comment);
             _db.SaveChanges();
 
+            return comment.Id;
+        }
+
+        public void EditComment(int taskId, string commentText, string createdBy, int commentId)
+        {
+            var comment = (from c in GetTask(taskId).Comments
+                           where c.Id == commentId
+                          select c).FirstOrDefault();
+
+            comment.Comment = commentText;
+            comment.CreatedBy = createdBy;
+            comment.CreatedDateTime = DateTime.Now;
+
+            //Save updated comment
+            _db.Entry(comment).State = System.Data.Entity.EntityState.Modified;
+            _db.SaveChanges();
+
+        }
+
+        public int AddCommentAttachment(int taskId, string fileName, string path, string fileType, int? commentId)
+        {
+            //Create a comment for the attachment if one doesn't exist
+            if (commentId == null)
+                commentId = AddComment(taskId, null, "Chris Sallee", null); //ToDo add identity
+
+            var attachment = new BoardCommentAttachment();
+            attachment.BoardTaskCommentId = (int)commentId;
+            attachment.FileName = fileName;
+            attachment.FilePath = path;
+            attachment.FileContentType = fileType;
+
+            //Save attachment
+            _db.BoardCommentAttachments.Add(attachment);
+            _db.SaveChanges();
+
+            return attachment.BoardTaskCommentId;
         }
     }
 }

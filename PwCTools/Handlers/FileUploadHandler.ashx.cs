@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace PwCTools.Handlers
 {
@@ -21,40 +22,47 @@ namespace PwCTools.Handlers
                     string pathrefer = context.Request.UrlReferrer.ToString();
                     string Serverpath = HttpContext.Current.Server.MapPath("Upload");
 
-                    var postedFile = context.Request.Files[0];
+                    int taskId = Convert.ToInt32(context.Request.Form["taskId"].ToString());
+                    int? commentId = null;
 
-                    string file;
-
-                    //For IE to get file name
-                    if (HttpContext.Current.Request.Browser.Browser.ToUpper() == "IE")
+                    foreach (string key in context.Request.Files)
                     {
-                        string[] files = postedFile.FileName.Split(new char[] { '\\' });
-                        file = files[files.Length - 1];
-                    }
-                    else
-                    {
-                        file = postedFile.FileName;
-                    }
+                        HttpPostedFile postedFile = context.Request.Files[key];
+                        string file;
 
-                    if (!Directory.Exists(Serverpath))
-                        Directory.CreateDirectory(Serverpath);
-
-                    string fileDirectory = Serverpath;
-                    if (context.Request.QueryString["fileName"] != null)
-                    {
-                        file = context.Request.QueryString["fileName"];
-                        if (File.Exists(fileDirectory + "\\" + file))
+                        //For IE to get file name
+                        if (HttpContext.Current.Request.Browser.Browser.ToUpper() == "IE")
                         {
-                            File.Delete(fileDirectory + "\\" + file);
+                            string[] files = postedFile.FileName.Split(new char[] { '\\' });
+                            file = files[files.Length - 1];
                         }
+                        else
+                        {
+                            file = postedFile.FileName;
+                        }
+
+                        if (!Directory.Exists(Serverpath))
+                            Directory.CreateDirectory(Serverpath);
+
+                        string fileDirectory = Serverpath;
+                        if (context.Request.QueryString["fileName"] != null)
+                        {
+                            file = context.Request.QueryString["fileName"];
+                            if (File.Exists(fileDirectory + "\\" + file))
+                            {
+                                File.Delete(fileDirectory + "\\" + file);
+                            }
+                        }
+
+                        string ext = Path.GetExtension(fileDirectory + "\\" + file);
+                        file = Guid.NewGuid() + ext;
+
+                        fileDirectory = Serverpath + "\\" + file;
+
+                        postedFile.SaveAs(fileDirectory);
+                        var repo = new Models.BoardRepository();
+                        commentId = repo.AddCommentAttachment(taskId, postedFile.FileName, file, postedFile.ContentType, commentId);
                     }
-
-                    string ext = Path.GetExtension(fileDirectory + "\\" + file);
-                    file = Guid.NewGuid() + ext;
-
-                    fileDirectory = Serverpath + "\\" + file;
-
-                    //postedFile.SaveAs(fileDirectory);
 
                     context.Response.AddHeader("Vary", "Accept");
                     try
@@ -69,7 +77,15 @@ namespace PwCTools.Handlers
                         context.Response.ContentType = "text/plain";
                     }
 
-                    context.Response.Write("Success");
+                    //context.Response.Write("Success");
+                    
+                    var cust = new { CommentId = commentId };
+                    
+                    //serialize Customer object to JSON
+                    var serializer = new JavaScriptSerializer();
+                    var json = serializer.Serialize(cust);
+
+                    context.Response.Write(json);
                 }
             }
             catch (Exception exp)

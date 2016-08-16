@@ -117,7 +117,7 @@ namespace PwCTools.Controllers
             dynamic json = addCommentParams;
             var repo = new BoardRepository();
 
-            repo.AddComment((int)json.taskId, (string)json.comment, "Chris Sallee"); //ToDo add check on identity
+            repo.AddComment((int)json.taskId, (string)json.comment, "Chris Sallee", (int?)json.commentId); //ToDo add check on identity
 
             var response = Request.CreateResponse();
             response.StatusCode = HttpStatusCode.OK;

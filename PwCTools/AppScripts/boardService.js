@@ -63,8 +63,8 @@
             });
     };
 
-    var addComment = function (taskIdVal, commentVal) {
-        return $http.post("/api/BoardWebApi/AddComment", { taskId: taskIdVal, comment: commentVal })
+    var addComment = function (taskIdVal, commentVal, commentIdVal) {
+        return $http.post("/api/BoardWebApi/AddComment", { taskId: taskIdVal, comment: commentVal, commentId: commentIdVal })
             .then(function (response) {
                 return response.status == 200;
             }, function (error) {

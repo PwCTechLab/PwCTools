@@ -146,4 +146,13 @@ input[type="checkbox"].input-validation-error {
     border-radius: 10px;
 }
 
+#attachment-container {
+    margin-top: 3px;
+}
+
+    #attachment-container .thumbnail {
+        margin-bottom: 0px;
+        border: 0px;
+    }
+
 /* End File upload CSS*/

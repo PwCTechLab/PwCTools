@@ -19,10 +19,13 @@ namespace PwCTools.Models
         {
             get
             {
-                if (CreatedDateTime.TimeOfDay.Days > 0)
-                    return CreatedDateTime.TimeOfDay.Days.ToString() + " days ago";
+                TimeSpan dateDiff = (DateTime.Now - CreatedDateTime);
+                if (dateDiff.Days > 0)
+                        return dateDiff.Days.ToString() + " days ago";
+                else if (dateDiff.Hours > 0)
+                    return dateDiff.Hours.ToString() + " hours ago";
                 else
-                    return CreatedDateTime.TimeOfDay.Hours.ToString() + " hours ago";
+                    return dateDiff.Minutes.ToString() + " minutes ago";
             }    
         }
     }
