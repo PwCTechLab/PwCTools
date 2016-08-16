@@ -242,7 +242,7 @@
 
             .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label {
                 position: relative;
-                background: #f5f5f6;
+                background: #ededf0;
                 padding: 0.75em;
                 /*margin-left: 50px;*/
                 -webkit-background-clip: padding-box;
@@ -251,7 +251,7 @@
                 -webkit-border-radius: 3px;
                 -moz-border-radius: 3px;
                 border-radius: 3px;
-            }
+               }
 
                 /*.kanban-centered .kanban-entry .kanban-entry-inner .kanban-label:after {
                     content: '';
@@ -268,7 +268,7 @@
                 }*/
 
                 .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h2, .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label p {
-                    color: #737881;
+                    color: #303641;
                     font-family: "Noto Sans",sans-serif;
                     font-size: 12px;
                     margin: 0;
