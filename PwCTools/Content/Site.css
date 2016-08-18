@@ -56,7 +56,7 @@ input[type="checkbox"].input-validation-error {
 
 .panel-default {
     overflow: hidden;
-    padding: 20px 20px 20px 20px;
+    padding: 5px 5px 5px 5px;
 }
 
 .busyIndicator .alert {
