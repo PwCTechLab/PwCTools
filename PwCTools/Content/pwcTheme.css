@@ -1,0 +1,21 @@
+﻿body { background-color: #; }
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { 
+	font-family: "Georgia","Helvetica Neue", Helvetica, Arial, sans-serif !important; font-weight: 700; }
+
+.navbar { background-color: #68231F; }
+
+div .panel-heading { background-color: #AA5E5A;   }
+
+h1 { display: inline; padding-top: 15px; float: left; }
+
+img { margin: 10px; float: right; }
+
+div .panel { background-color: #F7EDEC; border-style: solid; border-width: 1px; border-color: #68231F; margin: 10px; }
+
+div .panel-primary { border-color: #68231F; background-color: #F9F9F9; }
+
+a.btn.btn-default.btn-sm.btn-user { background-color: #68231F; border-color: #AA5E5A; }
+
+button#btnEditTask { background-color: #68231F; border-color: #AA5E5A; }
+
+button#btnArchiveTask { background-color: #68231F; border-color: #AA5E5A; }
