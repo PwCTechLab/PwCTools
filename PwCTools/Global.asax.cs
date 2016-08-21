@@ -20,6 +20,9 @@ namespace PwCTools
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             HttpContext.Current.Cache["ActiveProject"] = 1; //TODO add code to manage project selection
+
+            var db = new Models.ApplicationDbContext();
+            db.Database.Initialize(true);   // force database creation
         }
     }
 }
