@@ -7,7 +7,7 @@ using PwCTools.Models;
 
 namespace PwCTools.DAL
 {
-    public class BoardInitializer : System.Data.Entity.DropCreateDatabaseAlways<BoardContext>
+    public class BoardInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<BoardContext>
     {
         protected override void Seed(BoardContext context)
         {

@@ -7,11 +7,16 @@ using System.Web;
 
 namespace PwCTools.Models
 {
-    public class BoardRepository
+    public class BoardRepository : DAL.Repositories.IBoardRepository, IDisposable
     {
 
         private int _projectId = (int)HttpContext.Current.Cache["ActiveProject"]; //ToDo need code to select and change this
-        BoardContext _db = BoardContext.GetInstance(1); //ToDo pass user id
+        private BoardContext _db;
+
+        public BoardRepository()
+        {
+            this._db = new BoardContext();
+        }
 
         private int GetActiveSprint(int projectId)
         {
@@ -230,6 +235,26 @@ namespace PwCTools.Models
             _db.SaveChanges();
 
             return attachment.BoardTaskCommentId;
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

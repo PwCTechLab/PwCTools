@@ -9,7 +9,7 @@ using System.Web;
 
 namespace PwCTools.DAL
 {
-    public class IdentityInitializer : CreateDatabaseIfNotExists<ApplicationDbContext>
+    public class IdentityInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
     {
         protected override void Seed(ApplicationDbContext context)
         {
@@ -28,10 +28,10 @@ namespace PwCTools.DAL
                 var userManager = new UserManager<ApplicationUser>(userStore);
 
                 // Add missing roles
-                var role = roleManager.FindByName("Admin");
+                var role = roleManager.FindByName("Administrators");
                 if (role == null)
                 {
-                    role = new IdentityRole("Admin");
+                    role = new IdentityRole("Administrators");
                     roleManager.Create(role);
                 }
 
@@ -48,7 +48,7 @@ namespace PwCTools.DAL
                         PhoneNumber = "5551234567",
                         //MustChangePassword = false
                     };
-                    userManager.Create(newUser, "Password1");
+                    userManager.Create(newUser, "Wer!2345");
                     userManager.SetLockoutEnabled(newUser.Id, false);
                     userManager.AddToRole(newUser.Id, "Admin");
                 }
