@@ -13,22 +13,22 @@ using PagedList;
 
 namespace PwCTools.Controllers
 {
-    public class ProgramsController : Controller
+    public class ProjectsController : Controller
     {
-        private IProgramRepository programRepository;
+        private IProjectRepository projectRepository;
 
-        public ProgramsController()
+        public ProjectsController()
         {
-            this.programRepository = new ProgramRepository(new BoardContext());
+            this.projectRepository = new ProjectRepository(new BoardContext());
         }
 
-        public ProgramsController(IProgramRepository programRepository)
+        public ProjectsController(IProjectRepository projectRepository)
         {
-            this.programRepository = programRepository;
+            this.projectRepository = projectRepository;
         }
 
         //
-        // GET: /Program/
+        // GET: /Project/
         [Authorize(Roles = "Administrators")]
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
@@ -46,48 +46,27 @@ namespace PwCTools.Controllers
             }
             ViewBag.CurrentFilter = searchString;
 
-            var programs = from s in programRepository.GetPrograms()
+            var projects = from s in projectRepository.GetProjects()
                            select s;
             if (!String.IsNullOrEmpty(searchString))
             {
-                programs = programs.Where(s => s.Name.ToUpper().Contains(searchString.ToUpper()));
+                projects = projects.Where(s => s.Name.ToUpper().Contains(searchString.ToUpper()));
             }
             switch (sortOrder)
             {
                 case "name_desc":
-                    programs = programs.OrderByDescending(s => s.Name);
+                    projects = projects.OrderByDescending(s => s.Name);
                     break;
                 case "Description":
-                    programs = programs.OrderBy(s => s.Description);
+                    projects = projects.OrderBy(s => s.Description);
                     break;
                 case "description_desc":
-                    programs = programs.OrderByDescending(s => s.Description);
+                    projects = projects.OrderByDescending(s => s.Description);
                     break;
                 default:  // Name ascending 
-                    programs = programs.OrderBy(s => s.Name);
+                    projects = projects.OrderBy(s => s.Name);
                     break;
             }
-
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(programs.ToPagedList(pageNumber, pageSize));
-        }
-
-        //
-        // GET: /Program/Details/5
-        [Authorize(Roles = "Administrators")]
-        public ViewResult Details(int id)
-        {
-            Program program = programRepository.GetProgramByID(id);
-            return View(program);
-        }
-
-        //
-        // GET: /Program/DetailsPartial/5
-        [Authorize(Roles = "Administrators")]
-        public ViewResult DetailsPartial(int id, int? page)
-        {
-            List<Project> projects = programRepository.GetProgramByID(id).Projects;
 
             int pageSize = 3;
             int pageNumber = (page ?? 1);
@@ -95,26 +74,60 @@ namespace PwCTools.Controllers
         }
 
         //
-        // GET: /Program/Create
+        // GET: /Project/Details/5
+        [Authorize(Roles = "Administrators")]
+        public ViewResult Details(int id)
+        {
+            Project project = projectRepository.GetProjectByID(id);
+            return View(project);
+        }
+
+        //
+        // GET: /Program/ColumnsDetailsPartial/5
+        [Authorize(Roles = "Administrators")]
+        public ViewResult DetailsPartialColumns(int id, int? page)
+        {
+            List<Column> columns = projectRepository.GetProjectByID(id).Columns;
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(columns.ToPagedList(pageNumber, pageSize));
+        }
+
+        //
+        // GET: /Program/SprintsDetailsPartial/5
+        [Authorize(Roles = "Administrators")]
+        public ViewResult DetailsPartialSprints(int id, int? page)
+        {
+            List<Sprint> sprints = projectRepository.GetProjectByID(id).Sprints;
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(sprints.ToPagedList(pageNumber, pageSize));
+        }
+
+        //
+        // GET: /Project/Create
         [Authorize(Roles = "Administrators")]
         public ActionResult Create()
         {
+            ViewBag.ProgramList = new SelectList(new ProgramRepository(new BoardContext()).GetPrograms(), "Id", "Name");
             return View();
         }
 
-        // POST: Programs/Create
+        // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,IsActive")] Program program)
+        public ActionResult Create([Bind(Include = "Id,ProgramId,Name,Description,IsActive")] Project project)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    programRepository.InsertProgram(program);
-                    programRepository.Save();
+                    projectRepository.InsertProject(project);
+                    projectRepository.Save();
                     return RedirectToAction("Index");
                 }
             }
@@ -123,31 +136,31 @@ namespace PwCTools.Controllers
                 //Log the error (uncomment dex variable name after DataException and add a line here to write a log.
                 ModelState.AddModelError(string.Empty, "Unable to save changes. Try again, and if the problem persists contact your system administrator.");
             }
-            return View(program);
+            return View(project);
         }
 
         //
-        // GET: /Program/Edit/5
+        // GET: /Project/Edit/5
         [Authorize(Roles = "Administrators")]
         public ActionResult Edit(int id)
         {
-            Program program = programRepository.GetProgramByID(id);
-            return View(program);
+            Project project = projectRepository.GetProjectByID(id);
+            return View(project);
         }
 
-        // POST: Programs/Edit/5
+        // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,IsActive")] Program program)
+        public ActionResult Edit([Bind(Include = "Id,ProgramId,Name,Description,IsActive")] Project project)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    programRepository.UpdateProgram(program);
-                    programRepository.Save();
+                    projectRepository.UpdateProject(project);
+                    projectRepository.Save();
                     return RedirectToAction("Index");
                 }
             }
@@ -156,11 +169,11 @@ namespace PwCTools.Controllers
                 //Log the error (uncomment dex variable name after DataException and add a line here to write a log.
                 ModelState.AddModelError(string.Empty, "Unable to save changes. Try again, and if the problem persists contact your system administrator.");
             }
-            return View(program);
+            return View(project);
         }
 
         //
-        // GET: /Program/Delete/5
+        // GET: /Project/Delete/5
         [Authorize(Roles = "Administrators")]
         public ActionResult Delete(bool? saveChangesError = false, int id = 0)
         {
@@ -168,20 +181,20 @@ namespace PwCTools.Controllers
             {
                 ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
             }
-            Program program = programRepository.GetProgramByID(id);
-            return View(program);
+            Project project = projectRepository.GetProjectByID(id);
+            return View(project);
         }
 
-        // POST: Programs/Delete/5
+        // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             try
             {
-                Program program = programRepository.GetProgramByID(id);
-                programRepository.DeleteProgram(id);
-                programRepository.Save();
+                Project project = projectRepository.GetProjectByID(id);
+                projectRepository.DeleteProject(id);
+                projectRepository.Save();
             }
             catch (DataException /* dex */)
             {
@@ -193,7 +206,7 @@ namespace PwCTools.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            programRepository.Dispose();
+            projectRepository.Dispose();
             base.Dispose(disposing);
         }
     }

@@ -12,13 +12,15 @@ namespace PwCTools.Controllers
         [HttpGet, ActionName("Get")]
         public HttpResponseMessage Get()
         {
-            var repo = new BoardRepository();
-            var response = Request.CreateResponse();
+            using (var repo = new BoardRepository())
+            {
+                var response = Request.CreateResponse();
 
-            response.Content = new StringContent(JsonConvert.SerializeObject(repo.GetColumns()));
-            response.StatusCode = HttpStatusCode.OK;
+                response.Content = new StringContent(JsonConvert.SerializeObject(repo.GetColumns()));
+                response.StatusCode = HttpStatusCode.OK;
 
-            return response;
+                return response; 
+            }
         }
 
         [HttpGet, ActionName("CanMove")]
@@ -39,13 +41,15 @@ namespace PwCTools.Controllers
         [HttpGet, ActionName("GetComments")]
         public HttpResponseMessage GetComments(int taskId)
         {
-            var repo = new BoardRepository();
-            var response = Request.CreateResponse();
+            using (var repo = new BoardRepository())
+            {
+                var response = Request.CreateResponse();
 
-            response.Content = new StringContent(JsonConvert.SerializeObject(repo.GetComments(taskId)));
-            response.StatusCode = HttpStatusCode.OK;
+                response.Content = new StringContent(JsonConvert.SerializeObject(repo.GetComments(taskId)));
+                response.StatusCode = HttpStatusCode.OK;
 
-            return response;
+                return response; 
+            }
         }
 
         [Route("api/BoardWebApi/MoveTask")]
@@ -53,13 +57,15 @@ namespace PwCTools.Controllers
         public HttpResponseMessage MoveTask(JObject moveTaskParams)
         {
             dynamic json = moveTaskParams;
-            var repo = new BoardRepository();
-            repo.MoveTask((int)json.taskId, (int)json.targetColId);
+            using (var repo = new BoardRepository())
+            {
+                repo.MoveTask((int)json.taskId, (int)json.targetColId);    
+            }
 
             var response = Request.CreateResponse();
-            response.StatusCode = HttpStatusCode.OK;
+                response.StatusCode = HttpStatusCode.OK;
 
-            return response;
+                return response; 
         }
 
         [Route("api/BoardWebApi/EditTask")]
@@ -67,17 +73,18 @@ namespace PwCTools.Controllers
         public HttpResponseMessage EditTask(JObject editTaskParams)
         {
             dynamic json = editTaskParams;
-            var repo = new BoardRepository();
-
-            if(json.taskId == "")
-                repo.AddTask((string)json.taskName, (string)json.taskDescription);
-            else
-                repo.EditTask((int)json.taskId, (string)json.taskName, (string)json.taskDescription);
+            using (var repo = new BoardRepository())
+            {
+                if (json.taskId == "")
+                    repo.AddTask((string)json.taskName, (string)json.taskDescription);
+                else
+                    repo.EditTask((int)json.taskId, (string)json.taskName, (string)json.taskDescription);    
+            }
 
             var response = Request.CreateResponse();
-            response.StatusCode = HttpStatusCode.OK;
+                response.StatusCode = HttpStatusCode.OK;
 
-            return response;
+                return response; 
         }
 
         [Route("api/BoardWebApi/ArchiveTask")]
@@ -85,9 +92,10 @@ namespace PwCTools.Controllers
         public HttpResponseMessage ArchiveTask(JObject archiveTaskParams)
         {
             dynamic json = archiveTaskParams;
-            var repo = new BoardRepository();
-
-            repo.ArchiveTask((int)json.taskId);
+            using (var repo = new BoardRepository())
+            {
+                repo.ArchiveTask((int)json.taskId); 
+            }
 
             var response = Request.CreateResponse();
             response.StatusCode = HttpStatusCode.OK;
@@ -100,9 +108,10 @@ namespace PwCTools.Controllers
         public HttpResponseMessage DeleteTask(JObject deleteTaskParams)
         {
             dynamic json = deleteTaskParams;
-            var repo = new BoardRepository();
-
-            repo.DeleteTask((int)json.taskId);
+            using (var repo = new BoardRepository())
+            {
+                repo.DeleteTask((int)json.taskId); 
+            }
 
             var response = Request.CreateResponse();
             response.StatusCode = HttpStatusCode.OK;
@@ -115,9 +124,10 @@ namespace PwCTools.Controllers
         public HttpResponseMessage AddComment(JObject addCommentParams)
         {
             dynamic json = addCommentParams;
-            var repo = new BoardRepository();
-
-            repo.AddComment((int)json.taskId, (string)json.comment, "Chris Sallee", (int?)json.commentId); //ToDo add check on identity
+            using (var repo = new BoardRepository())
+            {
+                repo.AddComment((int)json.taskId, (string)json.comment, "Chris Sallee", (int?)json.commentId); //ToDo add check on identity 
+            }
 
             var response = Request.CreateResponse();
             response.StatusCode = HttpStatusCode.OK;

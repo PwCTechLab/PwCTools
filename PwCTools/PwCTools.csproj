@@ -210,11 +210,18 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="DAL\BoardContext.cs" />
     <Compile Include="DAL\BoardInitializer.cs" />
     <Compile Include="DAL\IdentityInitializer.cs" />
     <Compile Include="DAL\Repositories\IBoardRepository.cs" />
+    <Compile Include="DAL\Repositories\IColumnRepository.cs" />
+    <Compile Include="DAL\Repositories\ISprintRepository.cs" />
+    <Compile Include="DAL\Repositories\IProjectRepository.cs" />
     <Compile Include="DAL\Repositories\IProgramRepository.cs" />
+    <Compile Include="DAL\Repositories\ColumnRepository.cs" />
+    <Compile Include="DAL\Repositories\SprintRepository.cs" />
+    <Compile Include="DAL\Repositories\ProjectRepository.cs" />
     <Compile Include="DAL\Repositories\ProgramRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -427,6 +434,14 @@
     <Content Include="Views\Programs\Details.cshtml" />
     <Content Include="Views\Programs\Edit.cshtml" />
     <Content Include="Views\Programs\Index.cshtml" />
+    <Content Include="Views\Projects\Create.cshtml" />
+    <Content Include="Views\Projects\Delete.cshtml" />
+    <Content Include="Views\Projects\Details.cshtml" />
+    <Content Include="Views\Projects\Edit.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Programs\DetailsPartial.cshtml" />
+    <Content Include="Views\Projects\DetailsPartialColumns.cshtml" />
+    <Content Include="Views\Projects\DetailsPartialSprints.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

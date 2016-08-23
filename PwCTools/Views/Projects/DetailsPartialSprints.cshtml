@@ -1,29 +1,8 @@
-﻿@model PagedList.IPagedList<PwCTools.Models.Program>
+﻿@model PagedList.IPagedList<PwCTools.Models.Sprint>
 @using PagedList.Mvc;
 
-@{
-    ViewBag.Title = "Projects";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h2>Programs</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-@using (Html.BeginForm("Index", "Programs", FormMethod.Get))
-{
-    <div class="form-group">
-        <div class="col-md-3">
-            <input type="text" class="form-control" name="SearchString" placeholder="Search by name" value="@ViewBag.CurrentFilter">
-        </div>
-        <div class="col-md-2">
-            <input type="submit" value="Search" class="btn btn-default" />
-        </div>
-    </div>
-}
-
 <div class="container">
+    <h4>Sprints</h4>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -32,6 +11,12 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.FirstOrDefault().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().EndDate)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.FirstOrDefault().IsActive)
@@ -50,12 +35,18 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.IsActive)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        @Html.ActionLink("Edit", "Edit", "Sprints", new { id = item.Id }, null) |
+                        @Html.ActionLink("Details", "Details", "Sprints", new { id = item.Id }, null) |
+                        @Html.ActionLink("Delete", "Delete", "Sprints", new { id = item.Id }, null)
                     </td>
                 </tr>
             }
@@ -65,4 +56,5 @@
 
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 </div>
+
 

@@ -10,8 +10,10 @@ namespace PwCTools.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Program")]
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool IsActive { get; set; }
         public virtual List<Project> Projects { get; set; }
     }
 }
