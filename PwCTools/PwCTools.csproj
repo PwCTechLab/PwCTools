@@ -197,12 +197,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationContextMigrations\201608262028305_Initial.cs" />
+    <Compile Include="ApplicationContextMigrations\201608262028305_Initial.Designer.cs">
+      <DependentUpon>201608262028305_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationContextMigrations\Configuration.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BoardContextMigrations\201608262053291_Initial.cs" />
+    <Compile Include="BoardContextMigrations\201608262053291_Initial.Designer.cs">
+      <DependentUpon>201608262053291_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BoardContextMigrations\Configuration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\BoardHub.cs" />
@@ -449,6 +459,14 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ApplicationContextMigrations\201608262028305_Initial.resx">
+      <DependentUpon>201608262028305_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BoardContextMigrations\201608262053291_Initial.resx">
+      <DependentUpon>201608262053291_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -17,8 +17,8 @@ namespace PwCTools.DAL.Repositories
         void ArchiveTask(int taskId);
         void DeleteTask(int taskId);
         List<BoardTaskComment> GetComments(int taskId);
-        int AddComment(int taskId, string commentText, string createdBy, int? commentId);
-        void EditComment(int taskId, string commentText, string createdBy, int commentId);
+        int AddComment(int taskId, string commentText, string createdById, int? commentId);
+        void EditComment(int taskId, string commentText, string createdById, int commentId);
         int AddCommentAttachment(int taskId, string fileName, string path, string fileType, int? commentId);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNet.Identity;
 
 namespace PwCTools.Models
 {
@@ -181,18 +182,18 @@ namespace PwCTools.Models
             return null;
         }
 
-        public int AddComment(int taskId, string commentText, string createdBy, int? commentId)
+        public int AddComment(int taskId, string commentText, string createdById, int? commentId)
         {
             if (commentId != null)
             {
-                EditComment(taskId, commentText, createdBy, (int)commentId);
+                EditComment(taskId, commentText, createdById, (int)commentId);
                 return (int)commentId;
             }
 
             var comment = new BoardTaskComment();
             comment.BoardTaskId = taskId;
             comment.Comment = commentText;
-            comment.CreatedBy = createdBy;
+            comment.CreatedById = createdById;
             comment.CreatedDateTime = DateTime.Now;
 
             //Save updated comment
@@ -202,14 +203,14 @@ namespace PwCTools.Models
             return comment.Id;
         }
 
-        public void EditComment(int taskId, string commentText, string createdBy, int commentId)
+        public void EditComment(int taskId, string commentText, string createdById, int commentId)
         {
             var comment = (from c in GetTask(taskId).Comments
                            where c.Id == commentId
                           select c).FirstOrDefault();
 
             comment.Comment = commentText;
-            comment.CreatedBy = createdBy;
+            comment.CreatedById = createdById;
             comment.CreatedDateTime = DateTime.Now;
 
             //Save updated comment
@@ -222,7 +223,7 @@ namespace PwCTools.Models
         {
             //Create a comment for the attachment if one doesn't exist
             if (commentId == null)
-                commentId = AddComment(taskId, null, "Chris Sallee", null); //ToDo add identity
+                commentId = AddComment(taskId, null, HttpContext.Current.User.Identity.GetUserId(), null);
 
             var attachment = new BoardCommentAttachment();
             attachment.BoardTaskCommentId = (int)commentId;

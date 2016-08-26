@@ -22,36 +22,51 @@ namespace PwCTools.DAL
 
             if (!db.Users.Any())
             {
-                var roleStore = new RoleStore<IdentityRole>(db);
-                var roleManager = new RoleManager<IdentityRole>(roleStore);
-                var userStore = new UserStore<ApplicationUser>(db);
-                var userManager = new UserManager<ApplicationUser>(userStore);
-
                 // Add missing roles
-                var role = roleManager.FindByName("Administrators");
-                if (role == null)
-                {
-                    role = new IdentityRole("Administrators");
-                    roleManager.Create(role);
-                }
+                CreateRole(db, "Administrators");
+                CreateRole(db, "User");
 
                 // Create test users
-                var user = userManager.FindByName("admin");
-                if (user == null)
+                CreateUser(db, "admin", "Admin", "User", "xxx@us.pwc.com", "5551234567", "Administrators");
+                CreateUser(db, "ChrisSallee", "Chris", "Sallee", "christopher.sallee@us.pwc.com", "2028157612", "User");
+                CreateUser(db, "MHall", "Mike", "Hall", "michael.p.hall@us.pwc.com", "7038014959", "User");
+
+            }
+        }
+
+        private static void CreateRole(ApplicationDbContext db, string roleName)
+        {
+            var roleStore = new RoleStore<IdentityRole>(db);
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+            var role = roleManager.FindByName(roleName);
+            if (role == null)
+            {
+                role = new IdentityRole(roleName);
+                roleManager.Create(role);
+            }
+        }
+
+        private static void CreateUser(ApplicationDbContext db, string userName, string firstName, string lastName, string email, string phoneNumber, string role)
+        {
+            var userStore = new UserStore<ApplicationUser>(db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            var user = userManager.FindByName(userName);
+            if (user == null)
+            {
+                var newUser = new ApplicationUser()
                 {
-                    var newUser = new ApplicationUser()
-                    {
-                        UserName = "admin",
-                        FirstName = "Admin",
-                        LastName = "User",
-                        Email = "xxx@us.pwc.com",
-                        PhoneNumber = "5551234567",
-                        //MustChangePassword = false
-                    };
-                    userManager.Create(newUser, "Wer!2345");
-                    userManager.SetLockoutEnabled(newUser.Id, false);
-                    userManager.AddToRole(newUser.Id, "Admin");
-                }
+                    UserName = userName,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    PhoneNumber = phoneNumber,
+                    //MustChangePassword = false
+                };
+                userManager.Create(newUser, "Wer!2345");
+                userManager.SetLockoutEnabled(newUser.Id, false);
+                userManager.AddToRole(newUser.Id, role);
             }
         }
     }

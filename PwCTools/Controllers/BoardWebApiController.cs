@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace PwCTools.Controllers
 {
@@ -126,7 +127,7 @@ namespace PwCTools.Controllers
             dynamic json = addCommentParams;
             using (var repo = new BoardRepository())
             {
-                repo.AddComment((int)json.taskId, (string)json.comment, "Chris Sallee", (int?)json.commentId); //ToDo add check on identity 
+                repo.AddComment((int)json.taskId, (string)json.comment, User.Identity.GetUserId(), (int?)json.commentId);
             }
 
             var response = Request.CreateResponse();
