@@ -217,10 +217,12 @@
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\BoardHub.cs" />
     <Compile Include="Controllers\BoardWebApiController.cs" />
+    <Compile Include="Controllers\ColumnsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\SprintsController.cs" />
     <Compile Include="DAL\BoardContext.cs" />
     <Compile Include="DAL\BoardInitializer.cs" />
     <Compile Include="DAL\IdentityInitializer.cs" />
@@ -452,6 +454,16 @@
     <Content Include="Views\Programs\DetailsPartial.cshtml" />
     <Content Include="Views\Projects\DetailsPartialColumns.cshtml" />
     <Content Include="Views\Projects\DetailsPartialSprints.cshtml" />
+    <Content Include="Views\Columns\Create.cshtml" />
+    <Content Include="Views\Columns\Delete.cshtml" />
+    <Content Include="Views\Columns\Details.cshtml" />
+    <Content Include="Views\Columns\Edit.cshtml" />
+    <Content Include="Views\Columns\Index.cshtml" />
+    <Content Include="Views\Sprints\Create.cshtml" />
+    <Content Include="Views\Sprints\Delete.cshtml" />
+    <Content Include="Views\Sprints\Details.cshtml" />
+    <Content Include="Views\Sprints\Edit.cshtml" />
+    <Content Include="Views\Sprints\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

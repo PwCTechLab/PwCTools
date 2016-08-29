@@ -1,15 +1,23 @@
-﻿@model PwCTools.Models.Program
+﻿@model PwCTools.Models.Sprint
 
 @{
-    ViewBag.Title = "Program Details";
+    ViewBag.Title = "Sprint Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Program Details</h3>
+<h3>Sprint Details</h3>
 
 <div>
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.Name)
+        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -27,6 +35,22 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.IsActive)
         </dt>
 
@@ -36,8 +60,6 @@
 
     </dl>
 </div>
-@{Html.RenderAction("DetailsPartial", new { Id = Model.Id });}
-
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
