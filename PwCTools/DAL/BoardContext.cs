@@ -21,9 +21,5 @@ namespace PwCTools.DAL
         public DbSet<BoardTaskComment> BoardTasksComments { get; set; }
         public DbSet<BoardCommentAttachment> BoardCommentAttachments { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-        }
     }
 }

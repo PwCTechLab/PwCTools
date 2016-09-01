@@ -17,6 +17,7 @@ namespace PwCTools.ApplicationContextMigrations
         protected override void Seed(PwCTools.Models.ApplicationDbContext context)
         {
             IdentityInitializer.InitializeIdentityForEF(context);
+            BoardInitializer.InitializeBoardForEF(new BoardContext());
         }
     }
 }
