@@ -73,6 +73,9 @@ namespace PwCTools.Controllers
                 return View(model);
             }
 
+            var user = await UserManager.FindByNameAsync(model.UserName);
+            var t = await UserManager.AddClaimAsync(user.Id, new Claim("FullName", user.FirstName + " " + user.LastName));
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
@@ -151,7 +154,7 @@ namespace PwCTools.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

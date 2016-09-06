@@ -126,6 +126,7 @@ namespace PwCTools.ApplicationContextMigrations
                         Id = c.String(nullable: false, maxLength: 128),
                         FirstName = c.String(),
                         LastName = c.String(),
+                        IsActive = c.Boolean(nullable: false, defaultValue: true),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),

@@ -28,7 +28,7 @@ namespace PwCTools.DAL
 
                 // Create test users
                 CreateUser(db, "admin", "Admin", "User", "xxx@us.pwc.com", "5551234567", "Administrators");
-                CreateUser(db, "ChrisSallee", "Chris", "Sallee", "christopher.sallee@us.pwc.com", "2028157612", "User");
+                CreateUser(db, "csallee002", "Chris", "Sallee", "christopher.sallee@us.pwc.com", "2028157612", "User");
                 CreateUser(db, "MHall", "Mike", "Hall", "michael.p.hall@us.pwc.com", "7038014959", "User");
 
             }

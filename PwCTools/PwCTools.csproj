@@ -197,9 +197,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationContextMigrations\201609011430237_Initial.cs" />
-    <Compile Include="ApplicationContextMigrations\201609011430237_Initial.Designer.cs">
-      <DependentUpon>201609011430237_Initial.cs</DependentUpon>
+    <Compile Include="ApplicationContextMigrations\201609012042096_Initial.cs" />
+    <Compile Include="ApplicationContextMigrations\201609012042096_Initial.Designer.cs">
+      <DependentUpon>201609012042096_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationContextMigrations\Configuration.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -209,6 +209,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApplicationUsersController.cs" />
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\BoardHub.cs" />
     <Compile Include="Controllers\BoardWebApiController.cs" />
@@ -466,6 +467,11 @@
     <Content Include="Views\ProjectUsers\Details.cshtml" />
     <Content Include="Views\ProjectUsers\Edit.cshtml" />
     <Content Include="Views\ProjectUsers\Index.cshtml" />
+    <Content Include="Views\ApplicationUsers\Create.cshtml" />
+    <Content Include="Views\ApplicationUsers\Delete.cshtml" />
+    <Content Include="Views\ApplicationUsers\Details.cshtml" />
+    <Content Include="Views\ApplicationUsers\Edit.cshtml" />
+    <Content Include="Views\ApplicationUsers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -475,8 +481,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ApplicationContextMigrations\201609011430237_Initial.resx">
-      <DependentUpon>201609011430237_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationContextMigrations\201609012042096_Initial.resx">
+      <DependentUpon>201609012042096_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -37,7 +37,6 @@ namespace PwCTools.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                //projectUsers = projectUsers.Where(s => (s.User.FirstName.ToUpper() + ' ' + s.User.LastName.ToUpper()).Contains(searchString.ToUpper()));
                 projectUsers =  projectUsers.ToList()
                     .Where(s => s.User.FullName.ToUpper().Contains(searchString.ToUpper())).AsQueryable();
             }

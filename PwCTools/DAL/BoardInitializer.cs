@@ -89,11 +89,11 @@ namespace PwCTools.DAL
                     var userManager = new UserManager<ApplicationUser>(store);
 
                     var comments = new List<BoardTaskComment>
-                {
-                    new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 1", CreatedById=userManager.FindByName("ChrisSallee").Id, CreatedDateTime=DateTime.Now.AddDays(-2) },
-                    new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 2", CreatedById=userManager.FindByName("MHall").Id, CreatedDateTime=DateTime.Now.AddHours(-12) },
-                    new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 3", CreatedById=userManager.FindByName("ChrisSallee").Id, CreatedDateTime=DateTime.Now.AddHours(-1) }
-                };
+                    {
+                        new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 1", CreatedById=userManager.FindByName("csallee002").Id, CreatedDateTime=DateTime.Now.AddDays(-2) },
+                        new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 2", CreatedById=userManager.FindByName("MHall").Id, CreatedDateTime=DateTime.Now.AddHours(-12) },
+                        new BoardTaskComment { BoardTaskId=2, Comment="Test Comment 3", CreatedById=userManager.FindByName("csallee002").Id, CreatedDateTime=DateTime.Now.AddHours(-1) }
+                    };
 
                     comments.ForEach(s => context.BoardTasksComments.Add(s));
                     context.SaveChanges();
