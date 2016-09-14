@@ -5,17 +5,17 @@
 <link href="~/Content/kanban.css" rel="stylesheet" />
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
 
-<div style="width:113%; margin: 0 auto 0 auto;">
+<div class="row">
 
-    <div class="row" ng-controller="boardCtrl">
+    <div class="col-md-8 col-md-offset-2" ng-controller="boardCtrl">
 
         <div ng-include="'/AppScripts/busyModal.html'" ng-show="isLoading"></div>
 
         <div class="row">
-            <div class="col-md-11">
+            <div class="col-md-3">
                 <h1>PwC Taskboard</h1>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 pull-right">
                 <button id="btnAddTask" type="button" class="btn btn-primary add-task" data-toggle="modal" data-ng-click="fillProjectUsers()" data-target="#updateTaskModal">Add&nbsp;&nbsp;<i class="fa fa-lg fa-plus-square-o" aria-hidden="true"></i></button>
             </div>
         </div>
