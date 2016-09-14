@@ -3,6 +3,7 @@
 }
 
 <link href="~/Content/kanban.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
 
 <div style="width:113%; margin: 0 auto 0 auto;">
 
@@ -15,7 +16,7 @@
                 <h1>PwC Taskboard</h1>
             </div>
             <div class="col-md-1">
-                <button id="btnAddTask" type="button" class="btn btn-primary add-task" data-toggle="modal" data-target="#updateTaskModal">Add&nbsp;&nbsp;<i class="fa fa-lg fa-plus-square-o" aria-hidden="true"></i></button>
+                <button id="btnAddTask" type="button" class="btn btn-primary add-task" data-toggle="modal" data-ng-click="fillProjectUsers()" data-target="#updateTaskModal">Add&nbsp;&nbsp;<i class="fa fa-lg fa-plus-square-o" aria-hidden="true"></i></button>
             </div>
         </div>
 
@@ -36,7 +37,10 @@
                                     </h5>
                                     <p>{{task.Description}}</p>
                                     <p>
-                                        <button type="button" id="btnEditTask" class="btn btn-default btn-xs" data-toggle="modal" data-target="#updateTaskModal" data-custom-id="{{task.Id}}" data-name="{{task.Name}}" data-description="{{task.Description}}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnEditTask" class="btn btn-default btn-xs" data-toggle="modal" data-ng-click="fillProjectUsers(task.AssignedToID)" data-target="#updateTaskModal"
+                                                data-custom-id="{{task.Id}}" data-name="{{task.Name}}" data-assignee="{{task.AssignedToID}}" data-duedate="{{task.DueDate}}" data-description="{{task.Description}}">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </button>
                                         <button type="button" id="btnArchiveTask" class="btn btn-default btn-xs" data-ng-click="archive(task.Id)"><i class="fa fa-archive" aria-hidden="true"></i></button>
                                     </p>
                                 </div>
@@ -61,6 +65,16 @@
                             <div class="form-group">
                                 <label for="task-name" class="control-label">Task Name:</label>
                                 <input type="text" class="form-control" id="task-name" data-ng-model="task.Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="task-assignee" class="control-label">Assign To:</label>
+                                <select class="form-control" id="task-assignee" ng-model="user" ng-options="user.FullName for user in users track by user.Id">
+                                    <option value="" label="Select and item"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="task-name" class="control-label">Due Date:</label>
+                                <input type="text" class="form-control" id="task-duedate" data-ng-model="task.DueDate">
                             </div>
                             <div class="form-group">
                                 <label for="description-text" class="control-label">Description:</label>
@@ -181,6 +195,7 @@
     <script src="~/Scripts/angular.js"></script>
     <script src="~/bundles/signalR"></script>
 
+    <script src="~/Scripts/jquery-ui-1.12.0.min.js"></script>
     <script src="~/Scripts/jquery.ui.widget.js"></script>
     <script src="~/Scripts/jquery.iframe-transport.js"></script>
     <script src="~/Scripts/jquery.fileupload.js"></script>
@@ -190,7 +205,3 @@
     <script src="~/AppScripts/boardService.js"></script>
     <script src="~/AppScripts/boardCtrl.js"></script>
 }
-
-<script type="text/javascript">
-
-</script>

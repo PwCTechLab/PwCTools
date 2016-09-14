@@ -43,6 +43,9 @@ namespace PwCTools.ApplicationContextMigrations
                         SprintId = c.Int(),
                         Name = c.String(),
                         Description = c.String(),
+                        AssignedToID = c.String(),
+                        DueDate = c.DateTime(),
+                        CreatedDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Columns", t => t.ColumnId)
@@ -126,7 +129,7 @@ namespace PwCTools.ApplicationContextMigrations
                         Id = c.String(nullable: false, maxLength: 128),
                         FirstName = c.String(),
                         LastName = c.String(),
-                        IsActive = c.Boolean(nullable: false, defaultValue: true),
+                        IsActive = c.Boolean(nullable: false),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),

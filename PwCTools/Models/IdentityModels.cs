@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace PwCTools.Models
 {
@@ -35,6 +36,9 @@ namespace PwCTools.Models
                 return Roles.Count;
             }
         }
+
+        public virtual List<ProjectUser> ProjectUsers { get; set; }
+        //public virtual List<BoardTask> BoardTasks { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -69,28 +73,15 @@ namespace PwCTools.Models
         public System.Data.Entity.DbSet<PwCTools.Models.Project> Projects { get; set; }
 
         //public System.Data.Entity.DbSet<PwCTools.Models.ApplicationUser> ApplicationUsers { get; set; }
+
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+            
+        //    modelBuilder.Entity<ApplicationUser>().HasKey<string>(u => u.Id);
+        //    //modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+        //    //modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+        //}
+
     }
 
-    public static class GenericPrincipalExtensions
-    {
-        public static string FullName(this System.Security.Principal.IPrincipal user)
-        {
-            if (user.Identity.IsAuthenticated)
-            {
-
-                var claimsIdentity = user.Identity as ClaimsIdentity;
-                if (claimsIdentity != null)
-                {
-                    foreach (var claim in claimsIdentity.Claims)
-                    {
-                        if (claim.Type == "FullName")
-                            return claim.Value;
-                    }
-                }
-                return "";
-            }
-            else
-                return "";
-        }
-    }
 }

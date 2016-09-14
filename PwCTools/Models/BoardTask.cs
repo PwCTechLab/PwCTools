@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -14,9 +15,11 @@ namespace PwCTools.Models
         [Display(Name = "Task")]
         public string Name { get; set; }
         public string Description { get; set; }
-
-        //public virtual Column Column { get; set; }
-        //public virtual Sprint Sprint { get; set; }
+        public string AssignedToID { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public Nullable<System.DateTime> DueDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public virtual List<BoardTaskComment> Comments { get; set; }
     }

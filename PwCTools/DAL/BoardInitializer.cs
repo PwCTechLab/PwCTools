@@ -70,11 +70,11 @@ namespace PwCTools.DAL
             {
                 var tasks = new List<BoardTask>
                 {
-                    new BoardTask { SprintId=1, ColumnId=1, Name="Task 1", Description="Task 1 Description" },
-                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 2", Description="Task 2 Description" },
-                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 3", Description="Task 3 Description" },
-                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 4", Description="Task 4 Description" },
-                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 5", Description="Task 5 Description" }
+                    new BoardTask { SprintId=1, ColumnId=1, Name="Task 1", Description="Task 1 Description", CreatedDate=DateTime.Now.AddDays(-12), DueDate=DateTime.Now.AddDays(+12) },
+                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 2", Description="Task 2 Description", CreatedDate=DateTime.Now.AddDays(-11), DueDate=DateTime.Now.AddDays(+12) },
+                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 3", Description="Task 3 Description", CreatedDate=DateTime.Now.AddDays(-10), DueDate=DateTime.Now.AddDays(+12) },
+                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 4", Description="Task 4 Description", CreatedDate=DateTime.Now.AddDays(-9), DueDate=DateTime.Now.AddDays(+12) },
+                    new BoardTask { SprintId=2, ColumnId=1, Name="Task 5", Description="Task 5 Description", CreatedDate=DateTime.Now.AddDays(-8), DueDate=DateTime.Now.AddDays(+12) }
                 };
 
                 tasks.ForEach(s => context.BoardTasks.Add(s));

@@ -29,6 +29,27 @@
            }, onError);
     };
 
+    $scope.fillProjectUsers = function fillProjectUsers(assignedToID) {
+        $scope.AssignedToID = assignedToID;
+        boardService.getProjectUsers()
+           .then(function (data) {
+               $scope.users = data;
+
+               if ($scope.AssignedToID != null)
+               {
+                   //Set the selected assignee
+                   $.each(data, function (index, obj) {
+                       if (obj.Id == $scope.AssignedToID) {
+                           $("#task-assignee option:selected").removeAttr("selected");
+                           $scope.user = data[index];
+                           return false;
+                       }
+                   });
+
+               }
+           }, onError);
+    };
+
     $scope.onDrop = function (data, targetColId) {
         boardService.canMoveTask(data.ColumnId, targetColId)
             .then(function (canMove) {
@@ -45,7 +66,7 @@
 
     //Edit Task
     $scope.save = function () {
-        boardService.editTask($('#task-id').val(), $('#task-name').val(), $('#task-description').val()).then(function (taskEdited) {
+        boardService.editTask($('#task-id').val(), $('#task-name').val(), $('#task-assignee').val(), $('#task-duedate').val(), $('#task-description').val()).then(function (taskEdited) {
             $scope.isLoading = false;
             boardService.sendRequest();
         }, onError);
@@ -112,15 +133,18 @@
 $(document).ready(function () {
 
     $('#updateTaskModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('custom-id') // Extract info from data-* attributes
-        var name = button.data('name')
-        var description = button.data('description')
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var id = button.data('custom-id'); // Extract info from data-* attributes
+        var name = button.data('name');
+        var description = button.data('description');
+        var duedate = button.data('duedate');
         
-        var modal = $(this)
-        modal.find('#task-id').val(id)
-        modal.find('#task-name').val(name)
-        modal.find('#task-description').val(description)
+        var modal = $(this);
+        modal.find('#task-id').val(id);
+        modal.find('#task-name').val(name);
+        if (duedate != "" && duedate != null)
+            modal.find('#task-duedate').val($.datepicker.formatDate('mm/dd/yy', new Date(duedate)));
+        modal.find('#task-description').val(description);
     })
 
     $('#taskDetailsModal').on('show.bs.modal', function (event) {
@@ -146,6 +170,10 @@ $(document).ready(function () {
     $("#btnAddTask").on("click", function () {
         $('#editTaskModalTitle').text('Create Task');
     })
+
+    $(function () {
+        $("#task-duedate").datepicker();
+    });
 
     //File Upload Script
     $('#btnFileUpload').fileupload({

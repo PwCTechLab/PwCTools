@@ -18,6 +18,15 @@
         });
     };
 
+    var getProjectUsers = function () {
+        return $http.get("/api/BoardWebApi/GetProjectUsers")
+            .then(function (response) {
+                return response.data;
+            }, function (error) {
+                return $q.reject(error.data.Message);
+            });
+    };
+
     var canMoveTask = function (sourceColIdVal, targetColIdVal) {
         return $http.get("/api/BoardWebApi/CanMove", { params: { sourceColId: sourceColIdVal, targetColId: targetColIdVal } })
             .then(function (response) {
@@ -36,8 +45,8 @@
             });
     };
 
-    var editTask = function (taskIdVal, taskNameVal, taskDescriptionVal) {
-        return $http.post("/api/BoardWebApi/EditTask", { taskId: taskIdVal, taskName: taskNameVal, taskDescription: taskDescriptionVal })
+    var editTask = function (taskIdVal, taskNameVal, taskAssigneeVal, taskDueDateVal, taskDescriptionVal) {
+        return $http.post("/api/BoardWebApi/EditTask", { taskId: taskIdVal, taskName: taskNameVal, taskAssignee: taskAssigneeVal, taskDueDate: taskDueDateVal, taskDescription: taskDescriptionVal })
             .then(function (response) {
                 return response.status == 200;
             }, function (error) {
@@ -99,6 +108,7 @@
     return {
         initialize: initialize,
         addComment: addComment,
+        getProjectUsers: getProjectUsers,
         deleteTask: deleteTask,
         archiveTask: archiveTask,
         editTask: editTask,

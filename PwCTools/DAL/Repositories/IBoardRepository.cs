@@ -12,8 +12,8 @@ namespace PwCTools.DAL.Repositories
         Column GetColumn(int? colId);
         BoardTask GetTask(int taskId);
         void MoveTask(int taskId, int targetColId);
-        void EditTask(int taskId, string taskName, string TaskDescription);
-        void AddTask(string taskName, string TaskDescription);
+        void EditTask(int taskId, string taskName, string taskAssignee, string taskDueDate, string TaskDescription);
+        void AddTask(string taskName, string taskAssignee, string taskDueDate, string TaskDescription);
         void ArchiveTask(int taskId);
         void DeleteTask(int taskId);
         List<BoardTaskComment> GetComments(int taskId);

@@ -77,9 +77,9 @@ namespace PwCTools.Controllers
             using (var repo = new BoardRepository())
             {
                 if (json.taskId == "")
-                    repo.AddTask((string)json.taskName, (string)json.taskDescription);
+                    repo.AddTask((string)json.taskName, (string)json.taskAssignee, (string)json.taskDueDate, (string)json.taskDescription);
                 else
-                    repo.EditTask((int)json.taskId, (string)json.taskName, (string)json.taskDescription);    
+                    repo.EditTask((int)json.taskId, (string)json.taskName, (string)json.taskAssignee, (string)json.taskDueDate, (string)json.taskDescription);    
             }
 
             var response = Request.CreateResponse();
@@ -127,13 +127,27 @@ namespace PwCTools.Controllers
             dynamic json = addCommentParams;
             using (var repo = new BoardRepository())
             {
-                repo.AddComment((int)json.taskId, (string)json.comment, User.Identity.GetUserId(), (int?)json.commentId);
+                repo.AddComment((int)json.taskId, (string)json.comment, User.Identity.GetUserId(), ((string)json.commentId == "") ? (int?)null : (int?)json.commentId);
             }
 
             var response = Request.CreateResponse();
             response.StatusCode = HttpStatusCode.OK;
 
             return response;
+        }
+
+        [HttpGet, ActionName("GetProjectUsers")]
+        public HttpResponseMessage GetProjectUsers()
+        {
+            using (var repo = new BoardRepository())
+            {
+                var response = Request.CreateResponse();
+
+                response.Content = new StringContent(JsonConvert.SerializeObject(repo.GetProjectUsers()));
+                response.StatusCode = HttpStatusCode.OK;
+
+                return response;
+            }
         }
     }
 }
