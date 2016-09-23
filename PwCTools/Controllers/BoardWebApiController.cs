@@ -11,8 +11,11 @@ namespace PwCTools.Controllers
     public class BoardWebApiController : ApiController
     {
         [HttpGet, ActionName("Get")]
-        public HttpResponseMessage Get()
+        public HttpResponseMessage Get(int projectId)
         {
+            //Set Default Project
+            System.Web.HttpContext.Current.Cache["ActiveProject"] = projectId;
+
             using (var repo = new BoardRepository())
             {
                 var response = Request.CreateResponse();
@@ -149,5 +152,6 @@ namespace PwCTools.Controllers
                 return response;
             }
         }
+
     }
 }

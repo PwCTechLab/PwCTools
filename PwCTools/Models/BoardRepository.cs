@@ -11,12 +11,15 @@ namespace PwCTools.Models
     public class BoardRepository : DAL.Repositories.IBoardRepository, IDisposable
     {
 
-        private int _projectId = (int)HttpContext.Current.Cache["ActiveProject"]; //ToDo need code to select and change this
-        private BoardContext _db;
+        private int? _projectId;
+        private ApplicationDbContext _db;
 
         public BoardRepository()
         {
-            this._db = new BoardContext();
+            DAL.Repositories.ProjectRepository project = new DAL.Repositories.ProjectRepository(new ApplicationDbContext());
+            _projectId = project.GetDefaultProject(HttpContext.Current.User.Identity.GetUserId());
+
+            this._db = new ApplicationDbContext();
         }
 
         private int GetActiveSprint(int projectId)
@@ -36,7 +39,7 @@ namespace PwCTools.Models
         {
             if (HttpContext.Current.Cache["columns"] == null)
             {
-                int activeSprintId = GetActiveSprint(_projectId);
+                int activeSprintId = GetActiveSprint((int)_projectId);
 
                 var columns = _db.Columns
                     .Where(c => c.ProjectId == _projectId)
@@ -138,7 +141,7 @@ namespace PwCTools.Models
             task.AssignedToID = taskAssignee;
             task.DueDate = (!String.IsNullOrEmpty(taskDueDate)) ? DateTime.Parse(taskDueDate) : (DateTime?)null;
             task.Description = TaskDescription;
-            task.SprintId = GetActiveSprint(_projectId);
+            task.SprintId = GetActiveSprint((int)_projectId);
             task.CreatedDate = DateTime.Now;
 
             //Put in first column
@@ -196,13 +199,10 @@ namespace PwCTools.Models
 
         public List<ApplicationUser> GetProjectUsers()
         {
-            using (ApplicationDbContext db = new ApplicationDbContext())
-            {
-                
-                var projectUsers = (from u in db.Users
-                                   from p in u.ProjectUsers
-                                   where p.ProjectId == _projectId
-                                   select new { id = u.Id, FirstName = u.FirstName, LastName = u.LastName }).ToList()
+            var projectUsers = (from u in _db.Users
+                                from p in u.ProjectUsers
+                                where p.ProjectId == _projectId
+                                select new { id = u.Id, FirstName = u.FirstName, LastName = u.LastName }).ToList()
                                    .Select(u => new ApplicationUser
                                    {
                                        Id = u.id,
@@ -210,8 +210,7 @@ namespace PwCTools.Models
                                        LastName = u.LastName
                                    }).ToList();
 
-                return projectUsers; 
-            }
+            return projectUsers;
         }
 
         public List<BoardTaskComment> GetComments(int taskId)

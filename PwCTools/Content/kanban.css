@@ -378,8 +378,10 @@ body {
     user-select: none;
 }
 
-button.add-task {
-    margin-top: 22px;
+#header-actionbuttons {
+    padding-top: 22px;
+    float: right;
+    padding-right: 2px;
 }
 
 .panel-default {

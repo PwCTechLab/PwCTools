@@ -19,7 +19,7 @@ namespace PwCTools.Controllers
 
         public ProjectsController()
         {
-            this.projectRepository = new ProjectRepository(new BoardContext());
+            this.projectRepository = new ProjectRepository(new ApplicationDbContext());
         }
 
         public ProjectsController(IProjectRepository projectRepository)
@@ -111,7 +111,7 @@ namespace PwCTools.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult Create()
         {
-            ViewBag.ProgramList = new SelectList(new ProgramRepository(new BoardContext()).GetPrograms(), "Id", "Name");
+            ViewBag.ProgramList = new SelectList(new ProgramRepository(new ApplicationDbContext()).GetPrograms(), "Id", "Name");
             return View();
         }
 

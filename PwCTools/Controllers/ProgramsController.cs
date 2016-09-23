@@ -19,7 +19,7 @@ namespace PwCTools.Controllers
 
         public ProgramsController()
         {
-            this.programRepository = new ProgramRepository(new BoardContext());
+            this.programRepository = new ProgramRepository(new ApplicationDbContext());
         }
 
         public ProgramsController(IProgramRepository programRepository)

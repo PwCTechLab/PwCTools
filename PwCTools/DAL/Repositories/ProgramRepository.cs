@@ -9,9 +9,9 @@ namespace PwCTools.DAL.Repositories
 {
     public class ProgramRepository : IProgramRepository, IDisposable
     {
-        private BoardContext context;
+        private ApplicationDbContext context;
 
-        public ProgramRepository(BoardContext context)
+        public ProgramRepository(ApplicationDbContext context)
         {
             this.context = context;
         }

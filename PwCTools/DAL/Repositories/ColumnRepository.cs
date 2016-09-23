@@ -9,9 +9,9 @@ namespace PwCTools.DAL.Repositories
 {
     public class ColumnRepository : IColumnRepository, IDisposable
     {
-        private BoardContext context;
+        private ApplicationDbContext context;
 
-        public ColumnRepository(BoardContext context)
+        public ColumnRepository(ApplicationDbContext context)
         {
             this.context = context;
         }

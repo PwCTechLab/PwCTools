@@ -22,5 +22,6 @@ namespace PwCTools.Models
 
         public virtual List<Column> Columns { get; set; }
         public virtual List<Sprint> Sprints { get; set; }
+        public virtual List<ProjectUser> ProjectUsers { get; set; }
     }
 }

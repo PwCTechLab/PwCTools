@@ -19,7 +19,7 @@ namespace PwCTools.Controllers
 
         public ColumnsController()
         {
-            this.columnRepository = new ColumnRepository(new BoardContext());
+            this.columnRepository = new ColumnRepository(new ApplicationDbContext());
         }
 
         public ColumnsController(IColumnRepository columnRepository)
@@ -87,7 +87,7 @@ namespace PwCTools.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult Create()
         {
-            ViewBag.ProjectList = new SelectList(new ProjectRepository(new BoardContext()).GetProjects(), "Id", "Name");
+            ViewBag.ProjectList = new SelectList(new ProjectRepository(new ApplicationDbContext()).GetProjects(), "Id", "Name");
             return View();
         }
 
@@ -123,7 +123,7 @@ namespace PwCTools.Controllers
             Column column = columnRepository.GetColumnByID(id);
 
             //Set project select
-            ViewBag.ProjectList = new SelectList(new ProjectRepository(new BoardContext()).GetProjects(), "Id", "Name", column.ProjectId);
+            ViewBag.ProjectList = new SelectList(new ProjectRepository(new ApplicationDbContext()).GetProjects(), "Id", "Name", column.ProjectId);
 
             return View(column);
         }

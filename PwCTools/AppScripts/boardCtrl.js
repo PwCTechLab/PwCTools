@@ -13,11 +13,19 @@
 
     $scope.refreshBoard = function refreshBoard() {
         $scope.isLoading = true;
-        boardService.getColumns()
+        var Id = $("#ProjectId").val();
+        boardService.getColumns(Id)
            .then(function (data) {
                $scope.isLoading = false;
                $scope.columns = data;
            }, onError);
+    };
+
+    $scope.updateProject = function updateProject(oldId, newId) {
+        boardService.updateProject(oldId, newId)
+        .then(function () {
+            $scope.refreshBoard();
+        }, onError);
     };
 
     $scope.loadTaskDetails = function loadTaskDetails(id) {
@@ -169,6 +177,18 @@ $(document).ready(function () {
 
     $("#btnAddTask").on("click", function () {
         $('#editTaskModalTitle').text('Create Task');
+    })
+
+    //Set project previous id
+    var project = $("#ProjectId");
+    project.data("prev", project.val());
+
+    project.change(function (data) {
+        var jqThis = $(this);
+        angular.element($("#boardCtrl")).scope().updateProject(jqThis.data("prev"), jqThis.val());
+
+        //update project previous id
+        jqThis.data("prev", jqThis.val());
     })
 
     $(function () {

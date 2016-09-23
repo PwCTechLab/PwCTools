@@ -197,9 +197,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationContextMigrations\201609122128561_Initial.cs" />
-    <Compile Include="ApplicationContextMigrations\201609122128561_Initial.Designer.cs">
-      <DependentUpon>201609122128561_Initial.cs</DependentUpon>
+    <Compile Include="ApplicationContextMigrations\201609161702514_Initial.cs" />
+    <Compile Include="ApplicationContextMigrations\201609161702514_Initial.Designer.cs">
+      <DependentUpon>201609161702514_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationContextMigrations\Configuration.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -220,8 +220,6 @@
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\ProjectUsersController.cs" />
     <Compile Include="Controllers\SprintsController.cs" />
-    <Compile Include="DAL\BoardContext.cs" />
-    <Compile Include="DAL\BoardInitializer.cs" />
     <Compile Include="DAL\IdentityInitializer.cs" />
     <Compile Include="DAL\Repositories\IBoardRepository.cs" />
     <Compile Include="DAL\Repositories\IColumnRepository.cs" />
@@ -515,6 +513,7 @@
     <Content Include="Views\ApplicationUsers\Details.cshtml" />
     <Content Include="Views\ApplicationUsers\Edit.cshtml" />
     <Content Include="Views\ApplicationUsers\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout-Fluid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -524,8 +523,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ApplicationContextMigrations\201609122128561_Initial.resx">
-      <DependentUpon>201609122128561_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationContextMigrations\201609161702514_Initial.resx">
+      <DependentUpon>201609161702514_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

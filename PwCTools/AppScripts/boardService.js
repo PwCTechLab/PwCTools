@@ -1,8 +1,9 @@
 ﻿sulhome.kanbanBoardApp.service('boardService', function ($http, $q, $rootScope) {
     var proxy = null;
 
-    var getColumns = function () {
-        return $http.get("/api/BoardWebApi/Get").then(function (response) {
+    var getColumns = function (projectIdVal) {
+        return $http.get("/api/BoardWebApi/Get", { params: { projectId: projectIdVal } })
+            .then(function (response) {
             return response.data;
         }, function (error) {
             return $q.reject(error.data.Message);
@@ -82,17 +83,18 @@
     };
 
     var initialize = function () {
+        this.proxy = $.connection.KanbanBoard;
 
-        connection = jQuery.hubConnection();
-        this.proxy = connection.createHubProxy('KanbanBoard');
+        var Id = $("#ProjectId").val();
+        $.connection.hub.qs = 'projectId=' + Id;
 
         // Listen to the 'BoardUpdated' event that will be pushed from SignalR server
-        this.proxy.on('BoardUpdated', function () {
+        this.proxy.client.BoardUpdated = function (name, message) {
             $rootScope.$emit("refreshBoard");
-        });
+        };
 
         // Connecting to SignalR server        
-        return connection.start()
+        return $.connection.hub.start()
         .then(function (connectionObj) {
             return connectionObj;
         }, function (error) {
@@ -102,7 +104,17 @@
 
     // Call 'NotifyBoardUpdated' on SignalR server
     var sendRequest = function () {
-        this.proxy.invoke('NotifyBoardUpdated');
+        this.proxy.invoke('NotifyBoardUpdated', $("#ProjectId").val());
+        $rootScope.$emit("refreshBoard");
+    };
+
+    var updateProject = function (oldProjectId, newProjectId) {
+        return this.proxy.server.leaveGroup(oldProjectId)
+        .then(function () {
+            return this.server.joinGroup(newProjectId);;
+        }, function (error) {
+            return error.message;
+        });
     };
 
     return {
@@ -113,6 +125,7 @@
         archiveTask: archiveTask,
         editTask: editTask,
         sendRequest: sendRequest,
+        updateProject: updateProject,
         getComments: getComments,
         getColumns: getColumns,
         canMoveTask: canMoveTask,

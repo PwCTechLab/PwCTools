@@ -13,6 +13,7 @@ namespace PwCTools.DAL.Repositories
         void InsertProject(Project project);
         void DeleteProject(int projectID);
         void UpdateProject(Project project);
+        List<Project> GetUserProjects(string id);
         void Save();
     }
 }

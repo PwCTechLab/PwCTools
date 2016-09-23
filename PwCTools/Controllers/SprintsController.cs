@@ -19,7 +19,7 @@ namespace PwCTools.Controllers
 
         public SprintsController()
         {
-            this.sprintRepository = new SprintRepository(new BoardContext());
+            this.sprintRepository = new SprintRepository(new ApplicationDbContext());
         }
 
         public SprintsController(ISprintRepository sprintRepository)
@@ -87,7 +87,7 @@ namespace PwCTools.Controllers
         [Authorize(Roles = "Administrators")]
         public ActionResult Create()
         {
-            ViewBag.ProjectList = new SelectList(new ProjectRepository(new BoardContext()).GetProjects(), "Id", "Name");
+            ViewBag.ProjectList = new SelectList(new ProjectRepository(new ApplicationDbContext()).GetProjects(), "Id", "Name");
             return View();
         }
 
@@ -123,7 +123,7 @@ namespace PwCTools.Controllers
             Sprint sprint = sprintRepository.GetSprintByID(id);
 
             //Set project select
-            ViewBag.ProjectList = new SelectList(new ProjectRepository(new BoardContext()).GetProjects(), "Id", "Name", sprint.ProjectId);
+            ViewBag.ProjectList = new SelectList(new ProjectRepository(new ApplicationDbContext()).GetProjects(), "Id", "Name", sprint.ProjectId);
 
             return View(sprint);
         }

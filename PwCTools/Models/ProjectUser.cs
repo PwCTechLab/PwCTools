@@ -13,7 +13,8 @@ namespace PwCTools.Models
         public string UserId { get; set; }
         [ForeignKey("Project")]
         public int ProjectId { get; set; }
-
+        [Display(Name = "Default Project")]
+        public bool Default { get; set; }
         
         public virtual ApplicationUser User { get; set; }
         public virtual Project Project { get; set; }

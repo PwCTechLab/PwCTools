@@ -38,7 +38,6 @@ namespace PwCTools.Models
         }
 
         public virtual List<ProjectUser> ProjectUsers { get; set; }
-        //public virtual List<BoardTask> BoardTasks { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -68,19 +67,14 @@ namespace PwCTools.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<PwCTools.Models.ProjectUser> ProjectUsers { get; set; }
-
+        public System.Data.Entity.DbSet<PwCTools.Models.Program> Programs { get; set; }
         public System.Data.Entity.DbSet<PwCTools.Models.Project> Projects { get; set; }
-
-        //public System.Data.Entity.DbSet<PwCTools.Models.ApplicationUser> ApplicationUsers { get; set; }
-
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        //{
-            
-        //    modelBuilder.Entity<ApplicationUser>().HasKey<string>(u => u.Id);
-        //    //modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
-        //    //modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
-        //}
+        public DbSet<Column> Columns { get; set; }
+        public DbSet<Sprint> Sprints { get; set; }
+        public DbSet<BoardTask> BoardTasks { get; set; }
+        public DbSet<BoardTaskComment> BoardTasksComments { get; set; }
+        public DbSet<BoardCommentAttachment> BoardCommentAttachments { get; set; }
+        public System.Data.Entity.DbSet<PwCTools.Models.ProjectUser> ProjectUsers { get; set; }
 
     }
 

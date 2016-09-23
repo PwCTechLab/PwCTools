@@ -9,9 +9,9 @@ namespace PwCTools.DAL.Repositories
 {
     public class ProjectRepository : IProjectRepository, IDisposable
     {
-        private BoardContext context;
+        private ApplicationDbContext context;
 
-        public ProjectRepository(BoardContext context)
+        public ProjectRepository(ApplicationDbContext context)
         {
             this.context = context;
         }
@@ -40,6 +40,35 @@ namespace PwCTools.DAL.Repositories
         public void UpdateProject(Project project)
         {
             context.Entry(project).State = EntityState.Modified;
+        }
+
+        public List<Project> GetUserProjects(string id)
+        {
+            var projects = (from p in context.Projects
+                            from pu in p.ProjectUsers
+                            where pu.UserId == id
+                            select p).ToList();
+
+            return projects;
+
+        }
+
+        public int? GetDefaultProject(string id)
+        {
+            if (HttpContext.Current.Cache["ActiveProject"] == null)
+            {
+                var projects = context.ProjectUsers
+                        .Where(p => p.UserId == id)
+                        .Where(d => d.Default == true).FirstOrDefault();
+
+                if (projects != null)
+                {
+                    HttpContext.Current.Cache["ActiveProject"] = projects.Id;
+                    return projects.Id;
+                }
+            }
+
+            return (int?)HttpContext.Current.Cache["ActiveProject"];
         }
 
         public void Save()

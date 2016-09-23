@@ -8,31 +8,18 @@ namespace PwCTools.ApplicationContextMigrations
         public override void Up()
         {
             CreateTable(
-                "dbo.Projects",
+                "dbo.BoardCommentAttachments",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ProgramId = c.Int(nullable: false),
-                        Name = c.String(),
-                        Description = c.String(),
-                        IsActive = c.Boolean(nullable: false),
+                        BoardTaskCommentId = c.Int(nullable: false),
+                        FileName = c.String(),
+                        FilePath = c.String(),
+                        FileContentType = c.String(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Programs", t => t.ProgramId, cascadeDelete: true)
-                .Index(t => t.ProgramId);
-            
-            CreateTable(
-                "dbo.Columns",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        ProjectId = c.Int(nullable: false),
-                        Name = c.String(),
-                        Description = c.String(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
-                .Index(t => t.ProjectId);
+                .ForeignKey("dbo.BoardTaskComments", t => t.BoardTaskCommentId, cascadeDelete: true)
+                .Index(t => t.BoardTaskCommentId);
             
             CreateTable(
                 "dbo.BoardTasks",
@@ -48,8 +35,8 @@ namespace PwCTools.ApplicationContextMigrations
                         CreatedDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Columns", t => t.ColumnId)
                 .ForeignKey("dbo.Sprints", t => t.SprintId)
+                .ForeignKey("dbo.Columns", t => t.ColumnId)
                 .Index(t => t.ColumnId)
                 .Index(t => t.SprintId);
             
@@ -68,18 +55,31 @@ namespace PwCTools.ApplicationContextMigrations
                 .Index(t => t.BoardTaskId);
             
             CreateTable(
-                "dbo.BoardCommentAttachments",
+                "dbo.Columns",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        BoardTaskCommentId = c.Int(nullable: false),
-                        FileName = c.String(),
-                        FilePath = c.String(),
-                        FileContentType = c.String(),
+                        ProjectId = c.Int(nullable: false),
+                        Name = c.String(),
+                        Description = c.String(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BoardTaskComments", t => t.BoardTaskCommentId, cascadeDelete: true)
-                .Index(t => t.BoardTaskCommentId);
+                .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
+                .Index(t => t.ProjectId);
+            
+            CreateTable(
+                "dbo.Projects",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        ProgramId = c.Int(nullable: false),
+                        Name = c.String(),
+                        Description = c.String(),
+                        IsActive = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Programs", t => t.ProgramId, cascadeDelete: true)
+                .Index(t => t.ProgramId);
             
             CreateTable(
                 "dbo.Programs",
@@ -93,28 +93,13 @@ namespace PwCTools.ApplicationContextMigrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Sprints",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        ProjectId = c.Int(nullable: false),
-                        Name = c.String(),
-                        Description = c.String(),
-                        StartDate = c.DateTime(nullable: false),
-                        EndDate = c.DateTime(nullable: false),
-                        IsActive = c.Boolean(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
-                .Index(t => t.ProjectId);
-            
-            CreateTable(
                 "dbo.ProjectUsers",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         UserId = c.String(maxLength: 128),
                         ProjectId = c.Int(nullable: false),
+                        Default = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
@@ -184,6 +169,22 @@ namespace PwCTools.ApplicationContextMigrations
                 .Index(t => t.RoleId);
             
             CreateTable(
+                "dbo.Sprints",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        ProjectId = c.Int(nullable: false),
+                        Name = c.String(),
+                        Description = c.String(),
+                        StartDate = c.DateTime(nullable: false),
+                        EndDate = c.DateTime(nullable: false),
+                        IsActive = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
+                .Index(t => t.ProjectId);
+            
+            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -198,19 +199,20 @@ namespace PwCTools.ApplicationContextMigrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.BoardTasks", "ColumnId", "dbo.Columns");
+            DropForeignKey("dbo.Columns", "ProjectId", "dbo.Projects");
+            DropForeignKey("dbo.BoardTasks", "SprintId", "dbo.Sprints");
+            DropForeignKey("dbo.Sprints", "ProjectId", "dbo.Projects");
             DropForeignKey("dbo.ProjectUsers", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.ProjectUsers", "ProjectId", "dbo.Projects");
-            DropForeignKey("dbo.BoardTasks", "SprintId", "dbo.Sprints");
-            DropForeignKey("dbo.Sprints", "ProjectId", "dbo.Projects");
             DropForeignKey("dbo.Projects", "ProgramId", "dbo.Programs");
-            DropForeignKey("dbo.BoardTasks", "ColumnId", "dbo.Columns");
             DropForeignKey("dbo.BoardTaskComments", "BoardTaskId", "dbo.BoardTasks");
             DropForeignKey("dbo.BoardCommentAttachments", "BoardTaskCommentId", "dbo.BoardTaskComments");
-            DropForeignKey("dbo.Columns", "ProjectId", "dbo.Projects");
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Sprints", new[] { "ProjectId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
@@ -218,26 +220,25 @@ namespace PwCTools.ApplicationContextMigrations
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.ProjectUsers", new[] { "ProjectId" });
             DropIndex("dbo.ProjectUsers", new[] { "UserId" });
-            DropIndex("dbo.Sprints", new[] { "ProjectId" });
-            DropIndex("dbo.BoardCommentAttachments", new[] { "BoardTaskCommentId" });
+            DropIndex("dbo.Projects", new[] { "ProgramId" });
+            DropIndex("dbo.Columns", new[] { "ProjectId" });
             DropIndex("dbo.BoardTaskComments", new[] { "BoardTaskId" });
             DropIndex("dbo.BoardTasks", new[] { "SprintId" });
             DropIndex("dbo.BoardTasks", new[] { "ColumnId" });
-            DropIndex("dbo.Columns", new[] { "ProjectId" });
-            DropIndex("dbo.Projects", new[] { "ProgramId" });
+            DropIndex("dbo.BoardCommentAttachments", new[] { "BoardTaskCommentId" });
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.Sprints");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.ProjectUsers");
-            DropTable("dbo.Sprints");
             DropTable("dbo.Programs");
-            DropTable("dbo.BoardCommentAttachments");
+            DropTable("dbo.Projects");
+            DropTable("dbo.Columns");
             DropTable("dbo.BoardTaskComments");
             DropTable("dbo.BoardTasks");
-            DropTable("dbo.Columns");
-            DropTable("dbo.Projects");
+            DropTable("dbo.BoardCommentAttachments");
         }
     }
 }

@@ -9,9 +9,9 @@ namespace PwCTools.DAL.Repositories
 {
     public class SprintRepository : ISprintRepository, IDisposable
     {
-        private BoardContext context;
+        private ApplicationDbContext context;
 
-        public SprintRepository(BoardContext context)
+        public SprintRepository(ApplicationDbContext context)
         {
             this.context = context;
         }
